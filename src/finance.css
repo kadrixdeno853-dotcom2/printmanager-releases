@@ -1,0 +1,40 @@
+.jobs-table .jobs-row{min-width:760px;grid-template-columns:1.05fr 1fr .76fr .86fr .66fr .68fr .82fr;column-gap:8px}.jobs-table .jobs-row>span{min-width:0}.jobs-table .jobs-row.labels>span:last-child{text-align:right}.jobs-table .jobs-row>span:last-child{width:100%;justify-self:stretch;justify-content:flex-end;font-variant-numeric:tabular-nums;white-space:nowrap}.jobs-table .job-payment{align-self:center;justify-self:start}.jobs-table .job-payment small{white-space:nowrap}
+.expense-material-purchase{margin:2px 0 14px;padding:12px;border:1px solid #d8e6df;border-radius:10px;background:#f6faf8}.modal-body .material-purchase-toggle{display:flex;align-items:center;gap:9px;margin:0}.material-purchase-toggle>input{width:16px;height:16px;margin:0;accent-color:#2d6b58}.material-purchase-toggle>span{display:grid}.material-purchase-toggle strong{font-size:9px;color:#31584c}.material-purchase-toggle small{font-size:7px;color:#7d8e88}.expense-material-purchase>.form-row{margin-top:11px}.expense-material-purchase>.form-row label{margin-bottom:0}
+.expense-list { overflow-x: auto; }
+.expense-row { min-width: 820px; width: 100%; display: grid; grid-template-columns: .8fr 1.25fr .8fr .85fr .8fr .8fr; gap: 11px; align-items: center; border: 0; border-bottom: 1px solid #edf1ef; background: white; padding: 12px 16px; text-align: left; color: #586b65; font-size: 9px; }
+.expense-row:not(.labels):hover { background: #f8faf9; }
+.expense-row.labels { background: #fafbfa; color: #96a19d; font-size: 8px; font-weight: 700; }
+.expense-row span:first-child strong, .expense-row span:first-child small { display: block; }
+.expense-row span:first-child strong { color: #294b42; }
+.expense-row span:first-child small { color: #8b9893; margin-top: 3px; font-size: 8px; }
+.expense-row > strong { text-align: right; color: #a65448; }
+.report-dates { display: flex; gap: 8px; }
+.report-controls{display:flex;align-items:flex-end;gap:10px}.report-export{white-space:nowrap}.report-export svg{width:15px}
+.report-dates label { color: #73847d; font-size: 8px; }
+.report-dates input { display: block; height: 35px; margin-top: 4px; border: 1px solid #dce4e0; border-radius: 7px; padding: 0 8px; color: #36534b; background: white; font-size: 9px; }
+.report-metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 11px; margin-bottom: 14px; }
+.report-metrics article { display: grid; grid-template-columns: 1fr auto; min-height: 105px; padding: 14px; background: white; border: 1px solid var(--border); border-radius: 10px; }
+.report-metrics article > span { grid-area: 1/2/3/3; width: 34px; height: 34px; display: grid; place-items: center; border-radius: 8px; color: #3b7263; background: #e6f0ec; }
+.report-metrics article > span svg { width: 18px; }
+.report-metrics small { color: #81908b; font-size: 9px; }
+.report-metrics strong { align-self: end; color: #29473f; font-size: 15px; }
+.report-metrics article.negative > span { color: #b35448; background: #ffebe7; }
+.report-metrics article.negative strong { color: #a54c42; }
+.report-grid { display: grid; grid-template-columns: 1.35fr .65fr; gap: 13px; }
+.category-bars { padding: 16px; }
+.category-bars > div { margin-bottom: 15px; }
+.category-bars p { display: flex; justify-content: space-between; margin: 0 0 6px; color: #5d7069; font-size: 9px; }
+.category-bars p strong { color: #36534b; }
+.category-bars > div > i { display: block; height: 7px; border-radius: 5px; background: #edf1ef; overflow: hidden; }
+.category-bars > div > i > span { display: block; height: 100%; border-radius: 5px; background: #477c6d; }
+.report-side > div:not(.panel-head):not(.report-note) { display: flex; align-items: center; gap: 10px; margin: 11px; padding: 12px; background: #f7f9f8; border-radius: 8px; }
+.report-side > div > span { width: 33px; height: 33px; display: grid; place-items: center; border-radius: 8px; color: #3e7465; background: #e4efea; }
+.report-side > div > span svg { width: 17px; }
+.report-side p, .report-side small, .report-side strong { display: block; margin: 0; }
+.report-side small { color: #81908b; font-size: 8px; }
+.report-side strong { color: #345149; margin-top: 4px; font-size: 11px; }
+.report-note { margin: 12px; padding: 12px; border: 1px solid #e4e9e7; border-radius: 8px; }
+.report-note strong { color: #405850; font-size: 9px; }
+.report-note p { margin-top: 5px; color: #788781; font-size: 8px; line-height: 1.6; }
+@media (max-width: 900px) { .report-metrics { grid-template-columns: 1fr 1fr; } .report-grid { grid-template-columns: 1fr; } }
+@media (max-width: 560px) { .report-metrics { grid-template-columns: 1fr; } .report-controls{width:100%;align-items:stretch;flex-direction:column}.report-dates { width: 100%; } .report-dates label { flex: 1; } .report-dates input { width: 100%; }.report-export{width:max-content} }

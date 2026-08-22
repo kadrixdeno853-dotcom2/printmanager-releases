@@ -1,0 +1,20 @@
+.floating-record-delete {
+  position: fixed;
+  z-index: 89;
+  right: 190px;
+  bottom: 18px;
+  height: 37px;
+  padding: 0 12px;
+  border: 1px solid #efd0ca;
+  border-radius: 8px;
+  background: #fff7f5;
+  color: #ad5147;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 9px;
+  font-weight: 600;
+}
+.floating-record-delete svg { width: 14px; }
+@media (max-width: 520px) { .floating-record-delete { right: 174px; } }
+.dashboard-supplier-payable { margin-bottom: 14px; }

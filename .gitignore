@@ -1,0 +1,13 @@
+node_modules/
+dist/
+web-dist/
+.build-cache/
+src-tauri/target/
+*.db
+*.db-wal
+*.db-shm
+*.pmbak
+*.key
+*.key.pub
+.env
+.env.*

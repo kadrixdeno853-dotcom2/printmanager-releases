@@ -1,0 +1,26 @@
+@media print {
+  html, body, #root { margin: 0 !important; padding: 0 !important; background: #fff !important; }
+  .print-document, .print-document *, .print-document *::before, .print-document *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+  .print-document { background-color: #fff !important; color: #253e38 !important; }
+  .print-document > header { border-bottom-color: #234f46 !important; }
+  .print-document th { background-color: #173d37 !important; color: #fff !important; box-shadow: inset 0 0 0 1000px #173d37 !important; }
+  .document-logo.printmanager-fallback { background-color: #d8f36d !important; box-shadow: inset 0 0 0 1000px #d8f36d !important; }
+  .document-logo.has-company-logo { background-color: #fff !important; }
+  .document-logo img { display: block !important; max-width: 100% !important; max-height: 100% !important; }
+  .quote-status, .invoice-status { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .quote-status { background-color: #edf1ef !important; box-shadow: inset 0 0 0 1000px #edf1ef !important; }
+  .quote-status.sent { background-color: #eaf0fa !important; color: #496eb3 !important; box-shadow: inset 0 0 0 1000px #eaf0fa !important; }
+  .quote-status.accepted { background-color: #e6f3eb !important; color: #337857 !important; box-shadow: inset 0 0 0 1000px #e6f3eb !important; }
+  .invoice-status { background-color: #fff0e4 !important; color: #9c6436 !important; box-shadow: inset 0 0 0 1000px #fff0e4 !important; }
+  .invoice-status.part_paid { background-color: #eaf0fb !important; color: #4d6fa8 !important; box-shadow: inset 0 0 0 1000px #eaf0fb !important; }
+  .invoice-status.paid { background-color: #e4f3e9 !important; color: #347657 !important; box-shadow: inset 0 0 0 1000px #e4f3e9 !important; }
+  .receipt-paid { background-color: #edf6f1 !important; border-color: #d7e8df !important; box-shadow: inset 0 0 0 1000px #edf6f1 !important; }
+  .print-document table { break-inside: auto; }
+  .print-document thead { display: table-header-group; }
+  .print-document tr, .document-meta, .document-bottom { break-inside: avoid; page-break-inside: avoid; }
+  .print-document a { color: inherit !important; text-decoration: none !important; }
+}

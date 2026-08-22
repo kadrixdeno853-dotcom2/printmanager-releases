@@ -1,0 +1,5 @@
+.material-performance { margin: 10px 0; padding: 9px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; border-radius: 8px; background: #f5f8f6; }
+.material-performance span, .material-performance small, .material-performance strong { display: block; }
+.material-performance small { color: #899691; font-size: 7px; }
+.material-performance strong { margin-top: 2px; color: #38554d; font-size: 8px; }
+.smart-material-match{width:max-content;display:flex;align-items:center;gap:4px;margin-bottom:3px;padding:3px 6px;border-radius:8px;background:#e8f3ee;color:#36735d;font-size:7px;font-style:normal;font-weight:700}.smart-material-match svg{width:10px;height:10px}

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "PrintManager",
+  "version": "0.2.0",
+  "identifier": "com.qatlex.printmanager",
+  "build": {
+    "beforeDevCommand": "npm.cmd run dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "npm.cmd run build",
+    "frontendDist": "../web-dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "PrintManager",
+        "width": 1440,
+        "height": 900,
+        "minWidth": 1024,
+        "minHeight": 700,
+        "center": true
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; img-src 'self' asset: data:; style-src 'self' 'unsafe-inline'; connect-src ipc: http://ipc.localhost"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["nsis"],
+    "createUpdaterArtifacts": true,
+    "shortDescription": "Offline printing business management",
+    "longDescription": "Manage printing jobs, customers, quotations, payments and production without an internet connection."
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDI5QTRCREE0OTMxMEY1N0MKUldSODlSQ1RwTDJrS2V1OXczTmU4VmxSQXN6VzhHcktMSjNRclVCcE1aRjBHZXN6ejV2Tm4xL24K",
+      "endpoints": ["https://github.com/kadrixdeno853-dotcom2/printmanager-releases/releases/latest/download/latest.json"],
+      "windows": { "installMode": "passive" }
+    }
+  }
+}

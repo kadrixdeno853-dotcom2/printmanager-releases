@@ -1,0 +1,24 @@
+.stock-value-explainer {
+  margin: 2px 0 13px;
+  padding: 11px 12px;
+  border: 1px solid #d8e5df;
+  border-radius: 9px;
+  background: #f3f8f5;
+  display: grid;
+}
+.stock-value-explainer small,.stock-value-explainer span { color: #778a83; font-size: 7px; }
+.stock-value-explainer strong { margin: 2px 0; color: #315c4f; font-size: 13px; }
+.roll-metre-calculator { margin: 9px 0; padding: 11px; border: 1px solid #d1e2da; border-radius: 9px; background: #f1f7f4; }
+.roll-metre-calculator header { display: grid; margin-bottom: 9px; }
+.roll-metre-calculator header strong { color: #315b4f; font-size: 9px; }
+.roll-metre-calculator header small { color: #7b8d86; font-size: 7px; }
+.roll-metre-calculator > div { display: grid; grid-template-columns: 1fr 1fr .9fr; gap: 8px; align-items: end; }
+.roll-metre-calculator label { margin: 0 !important; }
+.roll-metre-calculator > div > span { height: 41px; padding: 6px 9px; border-radius: 8px; background: var(--theme-primary); color: #fff; display: grid; align-content: center; }
+.roll-metre-calculator span small { font-size: 6px; opacity: .72; }
+.roll-metre-calculator span strong { font-size: 10px; }
+.purchase-cost-breakdown { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+.purchase-cost-breakdown > span { padding: 8px 10px; border-radius: 8px; background: #fff; border: 1px solid #e0e7e3; display: grid; }
+.purchase-cost-breakdown small { color: #81908b; font-size: 7px; }
+.purchase-cost-breakdown strong { color: #31544a; font-size: 10px; }
+@media(max-width:600px){.roll-metre-calculator>div{grid-template-columns:1fr 1fr}.roll-metre-calculator>div>span{grid-column:1/-1}}

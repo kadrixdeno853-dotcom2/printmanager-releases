@@ -1,0 +1,4 @@
+.expense-row.purchase-linked { cursor: default; background: #fbfcfb; }
+.expense-row.purchase-linked:hover { background: #f7faf8; }
+.expense-row.purchase-linked span:nth-child(2) small { display: block; margin-top: 3px; color: var(--theme-primary); font-size: 7px; font-weight: 600; }
+.expenses-custom-date{min-height:34px;padding:0 9px;border:1px solid #dfe6e3;border-radius:8px;background:#fff;color:#53645e;font-size:10px}

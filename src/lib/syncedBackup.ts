@@ -1,0 +1,8 @@
+import { createEncryptedBackup } from "./desktop";
+type Runtime={password:string;folder:string};
+let runtime:Runtime|null=null;let timer:number|undefined;let running=false;
+export const syncEnabled=()=>localStorage.getItem("printmanager.auto-sync-enabled")==="true";
+export const syncUnlocked=()=>!!runtime;
+export function unlockSyncedBackup(password:string,folder:string){runtime={password,folder};localStorage.setItem("printmanager.auto-sync-enabled","true");localStorage.setItem("printmanager.sync-folder",folder);window.dispatchEvent(new CustomEvent("printmanager:backup-status",{detail:{status:"protected",message:"Real-time backup protection is active."}}));}
+export function lockSyncedBackup(){runtime=null;localStorage.setItem("printmanager.auto-sync-enabled","false");if(timer)clearTimeout(timer);}
+export function scheduleSyncedBackup(){if(!runtime||running)return;if(timer)clearTimeout(timer);window.dispatchEvent(new CustomEvent("printmanager:backup-status",{detail:{status:"waiting",message:"Changes queued for encrypted backup…"}}));timer=window.setTimeout(async()=>{if(!runtime)return;running=true;window.dispatchEvent(new CustomEvent("printmanager:backup-status",{detail:{status:"syncing",message:"Encrypting and copying the latest data…"}}));try{await createEncryptedBackup(runtime.password,runtime.folder);localStorage.setItem("printmanager.last-sync",new Date().toISOString());window.dispatchEvent(new CustomEvent("printmanager:backup-status",{detail:{status:"protected",message:"All changes are protected in the sync folder."}}))}catch(error){window.dispatchEvent(new CustomEvent("printmanager:backup-status",{detail:{status:"error",message:String(error)}}))}finally{running=false}},4000)}

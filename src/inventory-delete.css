@@ -1,0 +1,25 @@
+.inventory-delete-button {
+  width: 29px !important;
+  height: 29px !important;
+  padding: 0 !important;
+  display: grid !important;
+  place-items: center !important;
+  border-color: #efd6d1 !important;
+  color: #ad5147 !important;
+  background: #fff8f7 !important;
+}
+.inventory-delete-button svg { width: 13px !important; }
+.inventory-modal-delete {
+  width: max-content;
+  border: 0;
+  background: transparent;
+  color: #ad5147;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 0;
+  font-size: 9px;
+  font-weight: 600;
+}
+.inventory-modal-delete svg { width: 14px; }
+.purchase-list > div { grid-template-columns: 1fr 1fr .65fr 1fr auto auto; align-items: center; }

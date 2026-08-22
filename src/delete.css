@@ -1,0 +1,4 @@
+.record-actions { display: flex; align-items: center; justify-content: flex-end; gap: 5px; }
+.record-delete { color: #ad5147 !important; border-color: #efd8d3 !important; }
+.record-delete:hover { background: #fff1ee !important; }
+.modal-actions .delete-link { margin-right: auto; border: 0; background: transparent; color: #ad5147; font-size: 9px; }
