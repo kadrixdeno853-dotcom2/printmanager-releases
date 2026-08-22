@@ -33,7 +33,7 @@
   },
   "plugins": {
     "updater": {
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDIzNzg2M0Q2RTg3ODgxQUUKUldTdWdYam8xbU40SStYR2Z5OFJBT0pER0pqcm5ZSUtYdkdRVktac2ppcUJiYUJBVml3Sk1hOWsK",
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDJGQjVDRTREQzM2RTNDOEIKUldTTFBHN0RUYzYxTHdIQzQ0ci9ObUlSblF3WVlKU3VNREtRaS80bjBxdndKY09XTExsL243RWoK",
       "endpoints": ["https://github.com/kadrixdeno853-dotcom2/printmanager-releases/releases/latest/download/latest.json"],
       "windows": { "installMode": "passive" }
     }
