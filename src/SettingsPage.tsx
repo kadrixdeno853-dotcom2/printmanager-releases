@@ -11,6 +11,7 @@ import {
   Server,
   Monitor,
   Upload,
+  Mail,
 } from "lucide-react";
 import {
   AuditEntry,
@@ -40,6 +41,7 @@ export default function SettingsPage({
   const [recoveryCode, setRecoveryCode] = useState("");
   const [logo, setLogo] = useState(profile.logoData || getCompanyLogo());
   const [theme,setTheme]=useState<AppTheme>(getTheme);
+  const [dailyReport,setDailyReport]=useState(()=>{try{return JSON.parse(localStorage.getItem("printmanager.daily-report")||"null")||{enabled:false,recipient:"",sendTime:"18:00"}}catch{return {enabled:false,recipient:"",sendTime:"18:00"}}});
   const [accountingRules,setAccountingRules]=useState(()=>{try{return JSON.parse(localStorage.getItem("printmanager.accounting-rules")||"null")||{operating:50,materials:20,salaries:15,tax:10,savings:5}}catch{return {operating:50,materials:20,salaries:15,tax:10,savings:5}}});
   const accountingTotal=Object.values(accountingRules).reduce((sum:number,value)=>sum+Number(value||0),0);
   const updateAccountingRule=(key:string,value:number)=>setAccountingRules((current:any)=>({...current,[key]:Math.max(0,Math.min(100,Number.isFinite(value)?value:0))}));
@@ -48,6 +50,7 @@ export default function SettingsPage({
   const [networkBusy,setNetworkBusy]=useState(false);
   const [networkMessage,setNetworkMessage]=useState("");
   const chooseTheme=(value:AppTheme)=>{setTheme(value);applyTheme(value);notifyActivity({title:"Colour theme changed",detail:`${themes.find(item=>item.id===value)?.name||value} theme applied.`,page:"Settings",tone:"info"})};
+  const saveDailyReport=()=>{localStorage.setItem("printmanager.daily-report",JSON.stringify(dailyReport));setMessage("Daily CEO report preferences saved.");notifyActivity({title:"Daily CEO report updated",detail:dailyReport.enabled?`Reports are scheduled for ${dailyReport.sendTime}.` : "Automatic reports are paused.",page:"Settings",tone:"info"})};
   useEffect(() => {
     void listAuditEntries().then(setAudit);
     void getCompanyNetworkStatus().then(setNetwork).catch(reason=>setNetworkMessage(String(reason)));
@@ -199,6 +202,12 @@ export default function SettingsPage({
             <header><Activity/><div><h2>Accounting rules</h2><p>Allocate every collection across your business reserves.</p></div><strong className={Math.round(accountingTotal)===100?"rules-valid":"rules-invalid"}>{accountingTotal}%</strong></header>
             <div className="accounting-rule-grid">{[["operating","Operating expenses"],["materials","Materials reserve"],["salaries","Salaries"],["tax","Tax reserve"],["savings","Business savings"]].map(([key,label])=><label key={key}><span>{label}</span><input type="number" min="0" max="100" step="1" value={accountingRules[key]} onChange={event=>updateAccountingRule(key,Number(event.target.value))}/><b>%</b></label>)}</div>
             <p className="accounting-rule-hint">The total must equal 100%. These percentages are used by the Dashboard Accounting Assistant.</p><button type="button" className="secondary-button" onClick={saveAccountingRules}><Save/>Save accounting rules</button>
+          </section>
+          <section className="settings-card daily-report-settings">
+            <header><Mail/><div><h2>Daily CEO report</h2><p>Prepare a daily business summary for the company owner.</p></div><span className={`report-state ${dailyReport.enabled?"enabled":""}`}>{dailyReport.enabled?"Enabled":"Paused"}</span></header>
+            <div className="report-form-grid"><label>CEO email address<input type="email" placeholder="ceo@company.com" value={dailyReport.recipient} onChange={event=>setDailyReport({...dailyReport,recipient:event.target.value})}/></label><label>Send time<input type="time" value={dailyReport.sendTime} onChange={event=>setDailyReport({...dailyReport,sendTime:event.target.value})}/></label></div>
+            <label className="active-toggle report-toggle"><input type="checkbox" checked={dailyReport.enabled} onChange={event=>setDailyReport({...dailyReport,enabled:event.target.checked})}/><span><i><Check size={13}/></i><strong>Send report automatically</strong><small>Requires the email delivery connection to be configured.</small></span></label>
+            <p className="accounting-rule-hint">The report will include collections, expenses, unpaid jobs, completed jobs and cash remaining. Email delivery is configured in the next step; these preferences are saved now.</p><button type="button" className="secondary-button" onClick={saveDailyReport}><Mail/>Save report schedule</button>
           </section>
           <section className="settings-card network-settings">
             <header><span className="network-heading-icon"><Network/></span><div><small>OFFICE COLLABORATION</small><h2>Company network</h2><p>Connect your team securely on the same Wi-Fi or LAN.</p></div><span className={`network-state ${network.connected?"online":""}`}><i/>{network.connected?"Connected":"Not connected"}</span></header>
