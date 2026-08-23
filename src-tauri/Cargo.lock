@@ -1423,7 +1423,7 @@ dependencies = [
 
 [[package]]
 name = "heck"
-version = "0.4.2"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "95505c38b4572b2d910cecb0281560f54b440a19336cbbcb27bf6ce6adc6f5a8"
 
@@ -2664,7 +2664,7 @@ checksum = "925383efa346730478fb4838dbe9137d2a47675ad789c546d150a6e1dd4ab31c"
 
 [[package]]
 name = "print-manager"
-version = "0.4.1"
+version = "0.4.3"
 dependencies = [
  "aes-gcm",
  "argon2",
