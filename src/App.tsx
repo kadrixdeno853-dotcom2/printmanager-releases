@@ -53,7 +53,6 @@ import ExpensesPage from "./ExpensesPage";
 import ReportsPage from "./ReportsPage";
 import InventoryPage from "./InventoryPage";
 import EmployeesPage from "./EmployeesPage";
-import WorkshopPage from "./WorkshopPage";
 import BackupPage from "./BackupPage";
 import SettingsPage from "./SettingsPage";
 import UpdateManager from "./UpdateManager";
@@ -77,6 +76,7 @@ import {
   listInvoices,
   listJobs,
   listProducts,
+  createLocalBackup,
   logout,
 } from "./lib/desktop";
 
@@ -95,6 +95,17 @@ type LiveNotification = {
   tone: "warning" | "danger" | "info";
 };
 
+async function createDailySafetyBackup() {
+  const today = new Date().toISOString().slice(0, 10);
+  if (localStorage.getItem("printmanager.daily-backup") === today) return;
+  try {
+    await createLocalBackup();
+    localStorage.setItem("printmanager.daily-backup", today);
+  } catch {
+    // Backups remain available manually if the local copy cannot be created.
+  }
+}
+
 const money = new Intl.NumberFormat("en-UG", {
   style: "currency",
   currency: "UGX",
@@ -104,12 +115,11 @@ const money = new Intl.NumberFormat("en-UG", {
 const navItems = [
   { label: "Dashboard", icon: LayoutDashboard },
   { label: "Accounting Assistant", icon: BrainCircuit },
-  { label: "Sales", icon: ShoppingCart },
   { label: "Jobs", icon: BriefcaseBusiness },
   { label: "Production", icon: Gauge },
-  { label: "Workshop", icon: CalendarDays },
   { label: "Customers", icon: Users },
   { label: "Quotations", icon: FileText },
+  { label: "Invoices", icon: ShoppingCart },
   { label: "Products", icon: PackagePlus },
   { label: "Expenses", icon: WalletCards },
   { label: "Reports", icon: ReceiptText },
@@ -122,22 +132,21 @@ const navItems = [
 const accessByRole: Record<string, string[]> = {
   owner: navItems.map((item) => item.label),
   manager: navItems.map((item) => item.label),
-  accountant: ["Dashboard", "Accounting Assistant", "Sales", "Customers", "Expenses", "Reports"],
-  sales: ["Dashboard", "Sales", "Jobs", "Customers", "Quotations", "Products"],
+  accountant: ["Dashboard", "Accounting Assistant", "Invoices", "Customers", "Expenses", "Reports"],
+  sales: ["Dashboard", "Invoices", "Jobs", "Customers", "Quotations", "Products"],
   designer: [
     "Dashboard",
     "Jobs",
     "Production",
-    "Workshop",
     "Customers",
     "Quotations",
     "Products",
   ],
-  operator: ["Jobs", "Production", "Workshop", "Inventory"],
-  quality: ["Dashboard", "Jobs", "Production", "Workshop"],
+  operator: ["Jobs", "Production", "Inventory"],
+  quality: ["Dashboard", "Jobs", "Production"],
   storekeeper: ["Dashboard", "Jobs", "Expenses", "Inventory"],
   delivery: ["Dashboard", "Jobs", "Production", "Customers"],
-  cashier: ["Dashboard", "Sales", "Customers", "Quotations"],
+  cashier: ["Dashboard", "Invoices", "Customers", "Quotations"],
 };
 
 const jobs = [
@@ -346,6 +355,7 @@ function App() {
       );
     };
     const refreshNotifications = async () => {
+      void createDailySafetyBackup();
       try {
         const [invoices, liveJobs, inventory] = await Promise.all([
           listInvoices().catch(() => [] as Invoice[]),
@@ -928,9 +938,7 @@ function App() {
             />
           ) : active === "Production" ? (
             <JobsPage board />
-          ) : active === "Workshop" ? (
-            <WorkshopPage />
-          ) : active === "Sales" ? (
+          ) : active === "Invoices" || active === "Sales" ? (
             <SalesPage />
           ) : active === "Expenses" ? (
             <ExpensesPage />
