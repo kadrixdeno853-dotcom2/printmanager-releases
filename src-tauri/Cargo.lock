@@ -2706,7 +2706,7 @@ checksum = "925383efa346730478fb4838dbe9137d2a47675ad789c546d150a6e1dd4ab31c"
 
 [[package]]
 name = "print-manager"
-version = "0.4.8"
+version = "0.4.9"
 dependencies = [
  "aes-gcm",
  "argon2",
