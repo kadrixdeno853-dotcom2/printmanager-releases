@@ -60,6 +60,7 @@ import CustomerProfileDrawer from "./CustomerProfileDrawer";
 import CompanyLogo, { saveCompanyLogo } from "./CompanyLogo";
 import { ActivityNotice, recentActivities } from "./lib/activity";
 import { scheduleSyncedBackup } from "./lib/syncedBackup";
+import { checkDailyReport } from "./lib/dailyReport";
 import { LoginScreen, OwnerSetup } from "./AuthScreens";
 import {
   BusinessProfile,
@@ -356,6 +357,7 @@ function App() {
     };
     const refreshNotifications = async () => {
       void createDailySafetyBackup();
+      void checkDailyReport().catch(() => undefined);
       try {
         const [invoices, liveJobs, inventory] = await Promise.all([
           listInvoices().catch(() => [] as Invoice[]),
