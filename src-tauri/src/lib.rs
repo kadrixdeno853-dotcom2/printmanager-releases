@@ -3,7 +3,7 @@
 mod database;
 
 use aes_gcm::{
-    aead::{rand_core::RngCore, Aead, KeyInit, OsRng},
+    aead::{Aead, KeyInit},
     Aes256Gcm, Nonce,
 };
 use base64::{engine::general_purpose::URL_SAFE_NO_PAD, Engine as _};
@@ -120,7 +120,7 @@ fn dropbox_status() -> Result<DropboxConnection, String> {
 #[tauri::command]
 fn connect_dropbox() -> Result<DropboxConnection, String> {
     let mut verifier_bytes = [0u8; 48];
-    OsRng.fill_bytes(&mut verifier_bytes);
+    getrandom::fill(&mut verifier_bytes).expect("OS random source unavailable");
     let verifier = URL_SAFE_NO_PAD.encode(verifier_bytes);
     let challenge = URL_SAFE_NO_PAD.encode(Sha256::digest(verifier.as_bytes()));
     let state = uuid::Uuid::new_v4().simple().to_string();
@@ -637,8 +637,8 @@ fn create_encrypted_backup(
     let plain = fs::read(&source).map_err(|error| error.to_string())?;
     let mut salt = [0u8; 16];
     let mut nonce_bytes = [0u8; 12];
-    OsRng.fill_bytes(&mut salt);
-    OsRng.fill_bytes(&mut nonce_bytes);
+    getrandom::fill(&mut salt).expect("OS random source unavailable");
+    getrandom::fill(&mut nonce_bytes).expect("OS random source unavailable");
     let key = derive_backup_key(&password, &salt)?;
     let cipher = Aes256Gcm::new_from_slice(&key).map_err(|error| error.to_string())?;
     let encrypted = cipher

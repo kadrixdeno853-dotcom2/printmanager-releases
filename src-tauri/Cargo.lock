@@ -2706,12 +2706,13 @@ checksum = "925383efa346730478fb4838dbe9137d2a47675ad789c546d150a6e1dd4ab31c"
 
 [[package]]
 name = "print-manager"
-version = "0.4.7"
+version = "0.4.8"
 dependencies = [
  "aes-gcm",
  "argon2",
  "base64 0.22.1",
  "chrono",
+ "getrandom 0.4.3",
  "keyring",
  "password-hash",
  "reqwest 0.12.28",
@@ -4085,7 +4086,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "32497e9a4c7b38532efcdebeef879707aa9f794296a4f0244f6f69e9bc8574bd"
 dependencies = [
  "fastrand",
- "getrandom 0.4.3",
+ "getrandom 0.3.4",
  "once_cell",
  "rustix",
  "windows-sys 0.61.2",
