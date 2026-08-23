@@ -111,7 +111,7 @@ export default function JobsPage({
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [priorityFilter, setPriorityFilter] = useState("all");
-  const [dueFilter, setDueFilter] = useState("all");
+  const [sortBy, setSortBy] = useState("newest");
   const [createdFilter, setCreatedFilter] = useState("all");
   const [customCreatedDate, setCustomCreatedDate] = useState("");
   const [paymentFilter, setPaymentFilter] = useState("all");
@@ -311,17 +311,21 @@ export default function JobsPage({
     const difference = new Date(`${date}T23:59:59`).getTime() - Date.now();
     return difference < 0 ? "overdue" : difference < 86400000 ? "today" : "";
   };
-  const jobs = allJobs.filter(
+  const filteredJobs = allJobs.filter(
     (job) =>
       (statusFilter === "all" || job.status === statusFilter) &&
       (priorityFilter === "all" || job.priority === priorityFilter) &&
-      (dueFilter === "all" ||
-        (dueFilter === "overdue" && dueTone(job.deadline) === "overdue") ||
-        (dueFilter === "today" && dueTone(job.deadline) === "today") ||
-        (dueFilter === "unscheduled" && !job.deadline)) &&
       matchesCreatedDate(job.createdAt, createdFilter, customCreatedDate) &&
       (paymentFilter === "all" || paymentState(job) === paymentFilter),
   );
+  const jobs = [...filteredJobs].sort((a, b) => {
+    if (sortBy === "oldest") return (a.createdAt || "").localeCompare(b.createdAt || "");
+    if (sortBy === "number-asc" || sortBy === "number-desc") {
+      const number = (job: Job) => Number((job.jobNumber || "").match(/\d+/)?.[0] || 0);
+      return (sortBy === "number-asc" ? 1 : -1) * (number(a) - number(b));
+    }
+    return (b.createdAt || "").localeCompare(a.createdAt || "");
+  });
   const matchingCustomers = customers
     .filter((customer) => {
       const query = customerQuery.trim().toLowerCase();
@@ -398,14 +402,14 @@ export default function JobsPage({
           <option value="urgent">Urgent</option>
         </select>
         <select
-          aria-label="Filter by deadline"
-          value={dueFilter}
-          onChange={(event) => setDueFilter(event.target.value)}
+          aria-label="Sort jobs"
+          value={sortBy}
+          onChange={(event) => setSortBy(event.target.value)}
         >
-          <option value="all">Any deadline</option>
-          <option value="today">Due today</option>
-          <option value="overdue">Overdue</option>
-          <option value="unscheduled">No deadline</option>
+          <option value="newest">Sort: Newest jobs</option>
+          <option value="oldest">Sort: Oldest jobs</option>
+          <option value="number-desc">Sort: Job number (high to low)</option>
+          <option value="number-asc">Sort: Job number (low to high)</option>
         </select>
       </div>
       <span>{jobs.length} jobs</span>
