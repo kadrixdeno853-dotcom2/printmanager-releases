@@ -57,6 +57,7 @@ export default function ExpensesPage() {
   const [editing, setEditing] = useState<Expense | null>(null);
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
+  const [paymentFilter, setPaymentFilter] = useState("all");
   const [periodFilter, setPeriodFilter] = useState("all");
   const [customDate, setCustomDate] = useState("");
   const [saving, setSaving] = useState(false);
@@ -109,6 +110,7 @@ export default function ExpensesPage() {
   const visibleExpenses = expenses.filter(
     (item) =>
       (categoryFilter === "all" || item.category === categoryFilter) &&
+      (paymentFilter === "all" || item.paymentStatus === paymentFilter) &&
       (periodFilter === "all" ||
         (periodFilter === "today" && item.expenseDate === today) ||
         (periodFilter === "month" && item.expenseDate.startsWith(month)) ||
@@ -208,6 +210,16 @@ export default function ExpensesPage() {
             <option value="custom">Custom date…</option>
             <option value="job">Job-related only</option>
           </select>
+          <select
+            value={paymentFilter}
+            onChange={(event) => setPaymentFilter(event.target.value)}
+            aria-label="Filter expenses by payment status"
+          >
+            <option value="all">All payment statuses</option>
+            <option value="paid">Paid</option>
+            <option value="part-paid">Part-paid</option>
+            <option value="unpaid">Unpaid</option>
+          </select>
           {periodFilter === "custom" && <input className="expenses-custom-date" type="date" value={customDate} onChange={event => setCustomDate(event.target.value)} aria-label="Choose expense date" />}
         </div>
         <span>{visibleExpenses.length} expenses</span>
@@ -219,12 +231,12 @@ export default function ExpensesPage() {
               <ReceiptText size={28} />
             </div>
             <h2>
-              {search || categoryFilter !== "all" || periodFilter !== "all"
+              {search || categoryFilter !== "all" || paymentFilter !== "all" || periodFilter !== "all"
                 ? "No expenses found"
                 : "Record your first expense"}
             </h2>
             <p>Expenses feed cash-flow and profit reports immediately.</p>
-            {!search && categoryFilter === "all" && periodFilter === "all" && (
+            {!search && categoryFilter === "all" && paymentFilter === "all" && periodFilter === "all" && (
               <button
                 className="primary-button"
                 onClick={() => setEditing(blank())}
