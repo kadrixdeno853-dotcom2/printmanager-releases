@@ -357,7 +357,7 @@ function App() {
     };
     const refreshNotifications = async () => {
       void createDailySafetyBackup();
-      void checkDailyReport().catch(() => undefined);
+      void checkDailyReport().catch((error) => { localStorage.setItem("printmanager.daily-report-error", String(error)); });
       try {
         const [invoices, liveJobs, inventory] = await Promise.all([
           listInvoices().catch(() => [] as Invoice[]),

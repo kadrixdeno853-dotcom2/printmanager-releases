@@ -26,6 +26,7 @@ import {
 import { notifyActivity } from "./lib/activity";
 import { getCompanyLogo, PrintManagerMark, saveCompanyLogo } from "./CompanyLogo";
 import { AppTheme, applyTheme, getTheme, themes } from "./lib/theme";
+import { sendDailyReport } from "./lib/dailyReport";
 
 export default function SettingsPage({
   profile,
@@ -51,6 +52,7 @@ export default function SettingsPage({
   const [networkMessage,setNetworkMessage]=useState("");
   const chooseTheme=(value:AppTheme)=>{setTheme(value);applyTheme(value);notifyActivity({title:"Colour theme changed",detail:`${themes.find(item=>item.id===value)?.name||value} theme applied.`,page:"Settings",tone:"info"})};
   const saveDailyReport=()=>{localStorage.setItem("printmanager.daily-report",JSON.stringify(dailyReport));setMessage("Daily CEO report preferences saved.");notifyActivity({title:"Daily CEO report updated",detail:dailyReport.enabled?`Reports are scheduled for ${dailyReport.sendTime}.` : "Automatic reports are paused.",page:"Settings",tone:"info"})};
+  const testDailyReport=async()=>{if(!dailyReport.recipient){setMessage("Enter the CEO email address first.");return}setMessage("Sending test report…");try{await sendDailyReport(dailyReport);localStorage.removeItem("printmanager.daily-report-last-sent");setMessage("Test report sent. Check the recipient inbox and spam folder.");}catch(reason){setMessage(`Report test failed: ${String(reason)}`)}};
   useEffect(() => {
     void listAuditEntries().then(setAudit);
     void getCompanyNetworkStatus().then(setNetwork).catch(reason=>setNetworkMessage(String(reason)));
@@ -207,7 +209,7 @@ export default function SettingsPage({
             <header><Mail/><div><h2>Daily CEO report</h2><p>Prepare a daily business summary for the company owner.</p></div><span className={`report-state ${dailyReport.enabled?"enabled":""}`}>{dailyReport.enabled?"Enabled":"Paused"}</span></header>
             <div className="report-form-grid"><label>CEO email address<input type="email" placeholder="ceo@company.com" value={dailyReport.recipient} onChange={event=>setDailyReport({...dailyReport,recipient:event.target.value})}/></label><label>Send time<input type="time" value={dailyReport.sendTime} onChange={event=>setDailyReport({...dailyReport,sendTime:event.target.value})}/></label></div>
             <label className="active-toggle report-toggle"><input type="checkbox" checked={dailyReport.enabled} onChange={event=>setDailyReport({...dailyReport,enabled:event.target.checked})}/><span><i><Check size={13}/></i><strong>Send report automatically</strong><small>Requires the email delivery connection to be configured.</small></span></label>
-            <p className="accounting-rule-hint">The report will include collections, expenses, unpaid jobs, completed jobs and cash remaining. Email delivery is configured in the next step; these preferences are saved now.</p><button type="button" className="secondary-button" onClick={saveDailyReport}><Mail/>Save report schedule</button>
+            <p className="accounting-rule-hint">The report will include collections, expenses, unpaid jobs, completed jobs and cash remaining. Reports send while PrintManager is open and online.</p><button type="button" className="secondary-button" onClick={saveDailyReport}><Mail/>Save report schedule</button><button type="button" className="secondary-button" onClick={()=>void testDailyReport()}><Mail/>Send test report</button>
           </section>
           <section className="settings-card network-settings">
             <header><span className="network-heading-icon"><Network/></span><div><small>OFFICE COLLABORATION</small><h2>Company network</h2><p>Connect your team securely on the same Wi-Fi or LAN.</p></div><span className={`network-state ${network.connected?"online":""}`}><i/>{network.connected?"Connected":"Not connected"}</span></header>
