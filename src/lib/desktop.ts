@@ -365,12 +365,12 @@ export async function createEncryptedBackup(
 
 export type DropboxConnection = { connected: boolean; displayName?: string | null; email?: string | null };
 export type DropboxBackup = { name: string; size: number; modified: string };
-export async function getDropboxStatus():Promise<DropboxConnection>{if(isDesktop()){await requireOwnerComputer("Dropbox backup");return invoke<DropboxConnection>("dropbox_status")}return{connected:false}}
-export async function connectDropbox():Promise<DropboxConnection>{if(isDesktop()){await requireOwnerComputer("Dropbox connection");return invoke<DropboxConnection>("connect_dropbox")}throw new Error("Dropbox connection is available in the installed desktop application.")}
+export async function getDropboxStatus():Promise<DropboxConnection>{if(isDesktop())return invoke<DropboxConnection>("dropbox_status");return{connected:false}}
+export async function connectDropbox():Promise<DropboxConnection>{if(isDesktop())return invoke<DropboxConnection>("connect_dropbox");throw new Error("Dropbox connection is available in the installed desktop application.")}
 export async function disconnectDropbox():Promise<void>{if(isDesktop()){await requireOwnerComputer("Dropbox connection");return invoke<void>("disconnect_dropbox")}}
 export async function createDropboxBackup(password:string):Promise<DropboxBackup>{if(isDesktop()){await requireOwnerComputer("Dropbox backup");return invoke<DropboxBackup>("create_dropbox_backup",{password})}throw new Error("Dropbox backup is available in the installed desktop application.")}
-export async function listDropboxBackups():Promise<DropboxBackup[]>{if(isDesktop()){await requireOwnerComputer("Dropbox backup history");return invoke<DropboxBackup[]>("list_dropbox_backups")}return[]}
-export async function restoreDropboxBackup(name:string,password:string):Promise<void>{if(isDesktop()){await requireOwnerComputer("Dropbox restore");return invoke<void>("restore_dropbox_backup",{name,password})}throw new Error("Dropbox restore is available in the installed desktop application.")}
+export async function listDropboxBackups():Promise<DropboxBackup[]>{if(isDesktop())return invoke<DropboxBackup[]>("list_dropbox_backups");return[]}
+export async function restoreDropboxBackup(name:string,password:string):Promise<void>{if(isDesktop())return invoke<void>("restore_dropbox_backup",{name,password});throw new Error("Dropbox restore is available in the installed desktop application.")}
 export async function recoverDropboxBackup(name:string,password:string):Promise<void>{if(isDesktop())return invoke<void>("recover_dropbox_backup",{name,password});throw new Error("Dropbox recovery is available in the installed desktop application.")}
 
 export async function listCustomers(search = ""): Promise<Customer[]> {
