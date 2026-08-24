@@ -754,12 +754,21 @@ export async function saveExpense(expense: Expense): Promise<Expense> {
   const expenses = JSON.parse(
     localStorage.getItem(expenseStorageKey) ?? "[]",
   ) as Expense[];
+  const id = expense.id ?? crypto.randomUUID();
+  let expenseNumber = expense.expenseNumber?.trim() ?? "";
+  const numberTaken = (value: string) => expenses.some((item) => item.expenseNumber === value && item.id !== id);
+  if (!expenseNumber || numberTaken(expenseNumber)) {
+    const highest = expenses.reduce((max, item) => {
+      const match = /^EXP-(\d+)$/.exec(item.expenseNumber ?? "");
+      return match ? Math.max(max, Number(match[1])) : max;
+    }, 0);
+    let next = highest + 1;
+    do { expenseNumber = `EXP-${String(next++).padStart(5, "0")}`; } while (numberTaken(expenseNumber));
+  }
   const saved = {
     ...expense,
-    id: expense.id ?? crypto.randomUUID(),
-    expenseNumber:
-      expense.expenseNumber ??
-      `EXP-${String(expenses.length + 1).padStart(5, "0")}`,
+    id,
+    expenseNumber,
   };
   saved.paymentStatus=(saved.amountPaid??0)<=0?"unpaid":(saved.amountPaid??0)>=saved.amount?"paid":"part-paid";
   const index = expenses.findIndex((item) => item.id === saved.id);

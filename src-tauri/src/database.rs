@@ -1340,15 +1340,42 @@ impl Database {
             .id
             .clone()
             .unwrap_or_else(|| Uuid::new_v4().to_string());
-        let number = match expense.expense_number.clone() {
-            Some(value) if !value.is_empty() => value,
-            _ => {
-                let sequence: i64 =
-                    self.connection
-                        .query_row("SELECT COUNT(*) + 1 FROM expenses", [], |row| row.get(0))?;
-                format!("EXP-{:05}", sequence)
+        // Expense numbers are unique identifiers. Never derive the next number
+        // from COUNT(*): deleted/imported rows can leave gaps and make that
+        // approach reuse an existing number. For new records, start after the
+        // highest numeric suffix and keep advancing until the number is free.
+        let mut number = expense
+            .expense_number
+            .clone()
+            .filter(|value| !value.trim().is_empty())
+            .unwrap_or_default();
+        let existing_id: Option<String> = self
+            .connection
+            .query_row(
+                "SELECT id FROM expenses WHERE expense_number = ?1 LIMIT 1",
+                params![number],
+                |row| row.get(0),
+            )
+            .optional()?;
+        if number.is_empty() || existing_id.as_deref().is_some_and(|existing| existing != id) {
+            let mut sequence: i64 = self.connection.query_row(
+                "SELECT COALESCE(MAX(CAST(SUBSTR(expense_number, 5) AS INTEGER)), 0) + 1 FROM expenses WHERE expense_number LIKE 'EXP-%'",
+                [],
+                |row| row.get(0),
+            )?;
+            loop {
+                number = format!("EXP-{:05}", sequence);
+                let taken: bool = self.connection.query_row(
+                    "SELECT EXISTS(SELECT 1 FROM expenses WHERE expense_number = ?1 AND id <> ?2)",
+                    params![number, id],
+                    |row| row.get(0),
+                )?;
+                if !taken {
+                    break;
+                }
+                sequence += 1;
             }
-        };
+        }
         self.connection.execute("INSERT INTO expenses (id, expense_number, job_id, purchase_id, category, payee, description, amount, amount_paid, due_date, payment_status, expense_date, payment_method, reference, notes) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15) ON CONFLICT(id) DO UPDATE SET job_id=excluded.job_id, category=excluded.category, payee=excluded.payee, description=excluded.description, amount=excluded.amount, amount_paid=excluded.amount_paid, due_date=excluded.due_date, payment_status=excluded.payment_status, expense_date=excluded.expense_date, payment_method=excluded.payment_method, reference=excluded.reference, notes=excluded.notes, updated_at=CURRENT_TIMESTAMP", params![id, number, expense.job_id, expense.purchase_id, expense.category.trim(), expense.payee.trim(), expense.description.trim(), expense.amount, expense.amount_paid, expense.due_date, expense.payment_status, expense.expense_date, expense.payment_method, expense.reference.trim(), expense.notes.trim()])?;
         expense.id = Some(id);
         expense.expense_number = Some(number);
