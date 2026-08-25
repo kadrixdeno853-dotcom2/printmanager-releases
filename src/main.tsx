@@ -11,6 +11,7 @@ import "./settings.css";
 import "./record-delete-actions.css";
 import "./themes.css";
 import "./document-theme.css";
+import "./report-export-menu.css";
 import { getTheme } from "./lib/theme";
 
 document.documentElement.dataset.theme = getTheme();
