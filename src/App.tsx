@@ -1,4 +1,5 @@
-﻿import { useEffect, useMemo, useRef, useState } from "react";
+﻿import { openUrl as openExternal } from "@tauri-apps/plugin-opener";
+import { useEffect, useMemo, useRef, useState } from "react";
 import "./delete.css";
 import "./material-tracking.css";
 import "./advanced-pricing.css";
@@ -627,7 +628,7 @@ function App() {
   };
   const continueReport = () => {
     setShowReportPrompt(false);
-    window.location.assign("https://kadrixdeno853-dotcom2.github.io/printmanager-releases/");
+    void openExternal("https://kadrixdeno853-dotcom2.github.io/printmanager-releases/");
   };
   const signOut = () =>
     void logout().then(() => {
