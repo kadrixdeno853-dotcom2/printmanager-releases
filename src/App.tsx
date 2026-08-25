@@ -210,6 +210,7 @@ function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showNewMenu, setShowNewMenu] = useState(false);
   const [showAccountMenu, setShowAccountMenu] = useState(false);
+  const [showReportPrompt, setShowReportPrompt] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<GlobalSearchResult[]>([]);
   const [searching, setSearching] = useState(false);
@@ -622,8 +623,11 @@ function App() {
   };
   const reportIssue = () => {
     setShowAccountMenu(false);
-    const proceed = window.confirm("Before submitting an issue, copy the exact error message if one is shown. Open the PrintManager support page now?");
-    if (proceed) window.open("https://kadrixdeno853-dotcom2.github.io/printmanager-releases/", "_blank", "noopener,noreferrer");
+    setShowReportPrompt(true);
+  };
+  const continueReport = () => {
+    setShowReportPrompt(false);
+    window.open("https://kadrixdeno853-dotcom2.github.io/printmanager-releases/", "_blank", "noopener,noreferrer");
   };
   const signOut = () =>
     void logout().then(() => {
@@ -1218,6 +1222,17 @@ function App() {
           </article>
         ))}
       </div>
+      {showReportPrompt && (
+        <div className="report-prompt-backdrop" role="dialog" aria-modal="true" aria-labelledby="report-prompt-title">
+          <section className="report-prompt">
+            <div className="report-prompt-icon"><CircleAlert size={22} /></div>
+            <p className="eyebrow">PRINTMANAGER ADMIN</p>
+            <h2 id="report-prompt-title">Before you report an issue</h2>
+            <p>If an error is displayed, copy the exact error message and include what you were doing when it happened. This helps our team resolve it faster.</p>
+            <div className="report-prompt-actions"><button className="secondary-button" onClick={() => setShowReportPrompt(false)}>Cancel</button><button className="primary-button" onClick={continueReport}>Open support page</button></div>
+          </section>
+        </div>
+      )}
       <UpdateManager />
     </div>
   );
