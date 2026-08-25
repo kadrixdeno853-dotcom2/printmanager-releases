@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from "react";
+﻿import { FormEvent, useEffect, useState } from "react";
 import {
   Boxes,
   Building2,
@@ -162,7 +162,7 @@ export default function InventoryPage() {
         const low = !finished && result.quantity <= result.reorderLevel;
         const cost = Math.round(((result.totalPrinted ?? 0) + (result.totalWaste ?? 0)) * result.unitCost);
         const profit = (result.totalRevenue ?? 0) - cost;
-        notifyActivity({ title: finished ? `${result.name} is finished` : low ? `${result.name} is running low` : `${result.name} usage recorded`, detail: finished ? `${result.totalPrinted ?? 0} ${result.unit} printed · ${result.totalWaste ?? 0} ${result.unit} lost · UGX ${(result.totalRevenue ?? 0).toLocaleString("en-UG")} revenue · UGX ${profit.toLocaleString("en-UG")} estimated profit` : `${usage.printedQuantity} ${result.unit} printed + ${usage.wasteQuantity} ${result.unit} waste · ${result.quantity} ${result.unit} remaining`, page: "Inventory", tone: finished || low ? "warning" : "info" });
+        notifyActivity({ title: finished ? `${result.name} is finished` : low ? `${result.name} is running low` : `${result.name} usage recorded`, detail: finished ? `${result.totalPrinted ?? 0} ${result.unit} printed Â· ${result.totalWaste ?? 0} ${result.unit} lost Â· UGX ${(result.totalRevenue ?? 0).toLocaleString("en-UG")} revenue Â· UGX ${profit.toLocaleString("en-UG")} estimated profit` : `${usage.printedQuantity} ${result.unit} printed + ${usage.wasteQuantity} ${result.unit} waste Â· ${result.quantity} ${result.unit} remaining`, page: "Inventory", tone: finished || low ? "warning" : "info" });
       }
     } catch (reason) {
       setError(String(reason));
@@ -459,7 +459,7 @@ export default function InventoryPage() {
               }
             />
           </label>
-          <div className="stock-value-explainer"><small>Estimated opening stock value</small><strong>UGX {Math.round(editItem.quantity*editItem.unitCost).toLocaleString("en-UG")}</strong><span>{editItem.quantity.toLocaleString("en-UG")} {editItem.unit} × UGX {editItem.unitCost.toLocaleString("en-UG",{maximumFractionDigits:2})} per {editItem.unit}</span></div>
+          <div className="stock-value-explainer"><small>Estimated opening stock value</small><strong>UGX {Math.round(editItem.quantity*editItem.unitCost).toLocaleString("en-UG")}</strong><span>{editItem.quantity.toLocaleString("en-UG")} {editItem.unit} Ã— UGX {editItem.unitCost.toLocaleString("en-UG",{maximumFractionDigits:2})} per {editItem.unit}</span></div>
         </SideForm>
       )}
       {editSupplier && (
@@ -495,6 +495,7 @@ export default function InventoryPage() {
             <label>
               Phone
               <input
+                placeholder="+256 7XX XXX XXX"
                 value={editSupplier.phone}
                 onChange={(e) =>
                   setEditSupplier({ ...editSupplier, phone: e.target.value })
@@ -581,7 +582,7 @@ export default function InventoryPage() {
                   }}
                 >
                   <option value="">Select material</option>
-                  <option value="__new__">＋ Create a new material with this purchase</option>
+                  <option value="__new__">ï¼‹ Create a new material with this purchase</option>
                   {items.map((i) => (
                     <option key={i.id} value={i.id!}>
                       {i.name}
@@ -644,7 +645,7 @@ export default function InventoryPage() {
           {error && <p className="setup-error">{error}</p>}
         </SideForm>
       )}
-      {supplierPayment && <SideForm title="Record supplier payment" onClose={()=>setSupplierPayment(null)} onSubmit={saveSupplierPayment}><div className="supplier-bill-detail"><small>{supplierPayment.purchase.purchaseNumber} · {supplierPayment.purchase.supplierName||"Supplier"}</small><strong>UGX {Math.max(0,supplierPayment.purchase.total-(supplierPayment.purchase.amountPaid??0)).toLocaleString("en-UG")} remaining</strong></div><label>Amount paid<input required autoFocus type="number" min="1" step="any" max={Math.max(0,supplierPayment.purchase.total-(supplierPayment.purchase.amountPaid??0))} value={supplierPayment.amount||""} onChange={e=>setSupplierPayment({...supplierPayment,amount:Number(e.target.value)})}/></label><label>Payment method<select value={supplierPayment.paymentMethod} onChange={e=>setSupplierPayment({...supplierPayment,paymentMethod:e.target.value})}><option value="cash">Cash</option><option value="mobile_money">Mobile money</option><option value="bank">Bank transfer</option><option value="card">Card</option></select></label><label>Reference<input value={supplierPayment.reference} onChange={e=>setSupplierPayment({...supplierPayment,reference:e.target.value})} placeholder="Transaction or receipt number"/></label>{error&&<p className="setup-error">{error}</p>}</SideForm>}
+      {supplierPayment && <SideForm title="Record supplier payment" onClose={()=>setSupplierPayment(null)} onSubmit={saveSupplierPayment}><div className="supplier-bill-detail"><small>{supplierPayment.purchase.purchaseNumber} Â· {supplierPayment.purchase.supplierName||"Supplier"}</small><strong>UGX {Math.max(0,supplierPayment.purchase.total-(supplierPayment.purchase.amountPaid??0)).toLocaleString("en-UG")} remaining</strong></div><label>Amount paid<input required autoFocus type="number" min="1" step="any" max={Math.max(0,supplierPayment.purchase.total-(supplierPayment.purchase.amountPaid??0))} value={supplierPayment.amount||""} onChange={e=>setSupplierPayment({...supplierPayment,amount:Number(e.target.value)})}/></label><label>Payment method<select value={supplierPayment.paymentMethod} onChange={e=>setSupplierPayment({...supplierPayment,paymentMethod:e.target.value})}><option value="cash">Cash</option><option value="mobile_money">Mobile money</option><option value="bank">Bank transfer</option><option value="card">Card</option></select></label><label>Reference<input value={supplierPayment.reference} onChange={e=>setSupplierPayment({...supplierPayment,reference:e.target.value})} placeholder="Transaction or receipt number"/></label>{error&&<p className="setup-error">{error}</p>}</SideForm>}
       {usage && (
         <SideForm
           title="Use material for a job"
@@ -663,7 +664,7 @@ export default function InventoryPage() {
                 .filter((j) => j.status !== "delivered")
                 .map((j) => (
                   <option key={j.id} value={j.id!}>
-                    {j.jobNumber} — {j.title}
+                    {j.jobNumber} â€” {j.title}
                   </option>
                 ))}
             </select>
