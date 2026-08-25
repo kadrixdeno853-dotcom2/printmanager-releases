@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+﻿import { useEffect, useMemo, useRef, useState } from "react";
 import "./delete.css";
 import "./material-tracking.css";
 import "./advanced-pricing.css";
@@ -38,6 +38,7 @@ import {
   Users,
   WalletCards,
   BrainCircuit,
+  CircleAlert,
   WifiOff,
   X,
 } from "lucide-react";
@@ -299,7 +300,7 @@ function App() {
             })),
             ...jobs.map((item) => ({
               title: item.jobNumber || item.title,
-              detail: `${item.customerName || "Walk-in customer"} · ${item.title}`,
+              detail: `${item.customerName || "Walk-in customer"} Â· ${item.title}`,
               page: "Jobs",
               icon: BriefcaseBusiness,
             })),
@@ -311,7 +312,7 @@ function App() {
               )
               .map((item) => ({
                 title: item.invoiceNumber || "Invoice",
-                detail: `${item.customerName || "Walk-in customer"} · UGX ${item.total.toLocaleString("en-UG")}`,
+                detail: `${item.customerName || "Walk-in customer"} Â· UGX ${item.total.toLocaleString("en-UG")}`,
                 page: "Sales",
                 icon: ReceiptText,
               })),
@@ -375,7 +376,7 @@ function App() {
             next.push({
               id: `payment-${invoice.id}`,
               title: `${invoice.invoiceNumber || "Invoice"} payment not received`,
-              detail: `${invoice.customerName || "Walk-in customer"} owes UGX ${invoice.balance.toLocaleString("en-UG")} · ${invoice.dueDate < today ? `Overdue since ${invoice.dueDate}` : `Due ${invoice.dueDate}`}`,
+              detail: `${invoice.customerName || "Walk-in customer"} owes UGX ${invoice.balance.toLocaleString("en-UG")} Â· ${invoice.dueDate < today ? `Overdue since ${invoice.dueDate}` : `Due ${invoice.dueDate}`}`,
               page: "Sales",
               tone: invoice.dueDate < today ? "danger" : "warning",
             }),
@@ -392,7 +393,7 @@ function App() {
             next.push({
               id: `job-${job.id}`,
               title: `${job.jobNumber || "Print job"} ${job.deadline! < today ? "is overdue" : "is due today"}`,
-              detail: `${job.customerName || "Walk-in customer"} · ${job.title}`,
+              detail: `${job.customerName || "Walk-in customer"} Â· ${job.title}`,
               page: "Jobs",
               tone: job.deadline! < today ? "danger" : "warning",
             }),
@@ -404,7 +405,7 @@ function App() {
             next.push({
               id: `stock-${item.id}`,
               title: `${item.name} is running low`,
-              detail: `${item.quantity} ${item.unit} remaining · Reorder level ${item.reorderLevel}`,
+              detail: `${item.quantity} ${item.unit} remaining Â· Reorder level ${item.reorderLevel}`,
               page: "Inventory",
               tone: "warning",
             }),
@@ -437,7 +438,7 @@ function App() {
               showToast({
                 id: `invoice-new-${invoice.id}`,
                 title: `${invoice.invoiceNumber || "New invoice"} created`,
-                detail: `${invoice.customerName || "Walk-in customer"} · UGX ${invoice.total.toLocaleString("en-UG")}`,
+                detail: `${invoice.customerName || "Walk-in customer"} Â· UGX ${invoice.total.toLocaleString("en-UG")}`,
                 page: "Sales",
                 tone: "info",
               });
@@ -456,7 +457,7 @@ function App() {
               showToast({
                 id: `job-new-${job.id}`,
                 title: `${job.jobNumber || "New print job"} created`,
-                detail: `${job.customerName || "Walk-in customer"} · ${job.title}`,
+                detail: `${job.customerName || "Walk-in customer"} Â· ${job.title}`,
                 page: "Jobs",
                 tone: "info",
               });
@@ -531,7 +532,7 @@ function App() {
     return (
       <div className="app-loading">
         <CompanyLogo className="brand-mark" />
-        <p>Opening your workspace…</p>
+        <p>Opening your workspaceâ€¦</p>
       </div>
     );
   if (profile === null && usersExist)
@@ -618,6 +619,11 @@ function App() {
     setSidebarOpen(false);
     setSearchQuery("");
     setShowNotifications(false);
+  };
+  const reportIssue = () => {
+    setShowAccountMenu(false);
+    const proceed = window.confirm("Before submitting an issue, copy the exact error message if one is shown. Open the PrintManager support page now?");
+    if (proceed) window.open("https://kadrixdeno853-dotcom2.github.io/printmanager-releases/", "_blank", "noopener,noreferrer");
   };
   const signOut = () =>
     void logout().then(() => {
@@ -716,6 +722,13 @@ function App() {
                   </span>
                 </button>
               )}
+              <button className="account-report" onClick={reportIssue}>
+                <CircleAlert size={16} />
+                <span>
+                  <strong>Report an issue</strong>
+                  <small>Copy errors and contact support</small>
+                </span>
+              </button>
               <button className="account-signout" onClick={signOut}>
                 <LogOut size={16} />
                 <span>
@@ -755,7 +768,7 @@ function App() {
               <input
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
-                placeholder="Search jobs, customers, invoices…"
+                placeholder="Search jobs, customers, invoicesâ€¦"
                 aria-label="Search workspace"
               />
               {searchQuery ? (
@@ -774,7 +787,7 @@ function App() {
                 <header>
                   <strong>Search results</strong>
                   <small>
-                    {searching ? "Searching…" : `${searchResults.length} found`}
+                    {searching ? "Searchingâ€¦" : `${searchResults.length} found`}
                   </small>
                 </header>
                 {!searching && searchResults.length === 0 ? (
@@ -815,7 +828,7 @@ function App() {
           <div className="top-actions">
             <div className="connection">
               <WifiOff size={16} />
-              <span>Offline • Working normally</span>
+              <span>Offline â€¢ Working normally</span>
             </div>
             <div className="notification-wrap">
               <button
@@ -961,7 +974,7 @@ function App() {
                   <p className="eyebrow">{date}</p>
                   <h1>Good morning, {firstName}.</h1>
                   <p>
-                    Here’s what is happening at {profile.businessName} today.
+                    Hereâ€™s what is happening at {profile.businessName} today.
                   </p>
                 </div>
                 <button className="secondary-button">
@@ -977,7 +990,7 @@ function App() {
                   <div>
                     <strong>Online backup waiting for internet</strong>
                     <p>
-                      Your work is safe on this computer. We’ll upload today’s
+                      Your work is safe on this computer. Weâ€™ll upload todayâ€™s
                       backup automatically when you reconnect.
                     </p>
                   </div>
@@ -1135,7 +1148,7 @@ function App() {
                   <div className="panel-head">
                     <div>
                       <h2>Needs attention</h2>
-                      <p>Items that may affect today’s work</p>
+                      <p>Items that may affect todayâ€™s work</p>
                     </div>
                   </div>
                   <div className="attention-item orange">
