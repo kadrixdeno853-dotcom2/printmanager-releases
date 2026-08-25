@@ -423,7 +423,7 @@ export default function JobsPage({
           <p className="eyebrow">
             {board ? "WORKSHOP FLOW" : "JOB MANAGEMENT"}
           </p>
-          <h1>{board ? "Production board" : "Print jobs"}</h1>
+          <h1>{board ? "Production board" : "Print Jobs"}</h1>
           <p>
             {board
               ? "See every job’s current stage and move work through production."
@@ -1153,3 +1153,4 @@ function localTimestampDate(value:string){
   const date=new Date(/Z$|[+-]\d\d:?\d\d$/.test(normalized)?normalized:`${normalized}Z`);
   return Number.isNaN(date.getTime())?value.slice(0,10):localDateKey(date);
 }
+

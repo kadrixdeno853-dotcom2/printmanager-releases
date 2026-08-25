@@ -16,6 +16,7 @@ import {
 } from "./lib/desktop";
 import { notifyActivity } from "./lib/activity";
 import DeleteConfirm from "./DeleteConfirm";
+import "./phone-fields.css";
 
 const emptyCustomer: Customer = {
   name: "",
@@ -240,11 +241,7 @@ export default function CustomersPage() {
                 </label>
                 <label>
                   Phone number
-                  <input
-                    required
-                    value={editing.phone}
-                    onChange={(e) => update("phone", e.target.value)}
-                  />
+                  <div className="phone-input"><span>+256</span><input required value={editing.phone.replace(/^\+?256\s*/, "")} onChange={(e) => update("phone", e.target.value)} /></div>
                 </label>
               </div>
               <div className="form-row">
