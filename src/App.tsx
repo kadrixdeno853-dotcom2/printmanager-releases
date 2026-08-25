@@ -627,7 +627,7 @@ function App() {
   };
   const continueReport = () => {
     setShowReportPrompt(false);
-    window.open("https://kadrixdeno853-dotcom2.github.io/printmanager-releases/", "_blank", "noopener,noreferrer");
+    window.location.assign("https://kadrixdeno853-dotcom2.github.io/printmanager-releases/");
   };
   const signOut = () =>
     void logout().then(() => {
