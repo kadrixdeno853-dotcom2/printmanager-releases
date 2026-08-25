@@ -474,13 +474,6 @@ export async function saveQuotation(quotation: Quotation): Promise<Quotation> {
     localStorage.getItem(quotationStorageKey) ?? "[]",
   ) as Quotation[];
   const index = quotations.findIndex((item) => item.id === quotation.id);
-  const id = job.id ?? crypto.randomUUID();
-  let jobNumber = job.jobNumber?.trim() ?? "";
-  const numberTaken = (value: string) => jobs.some((item) => item.jobNumber === value && item.id !== id);
-  if (!jobNumber || numberTaken(jobNumber)) {
-    let next = jobs.reduce((max, item) => { const match = /^JOB-(\d+)$/.exec(item.jobNumber ?? ""); return match ? Math.max(max, Number(match[1])) : max; }, 0) + 1;
-    do { jobNumber = `JOB-${String(next++).padStart(5, "0")}`; } while (numberTaken(jobNumber));
-  }
   const saved = {
     ...quotation,
     id: quotation.id ?? crypto.randomUUID(),
@@ -575,6 +568,10 @@ export async function saveJob(job: Job): Promise<Job> {
   if (isDesktop()){const remote=await companyRpc<Job>("jobs.save",job);if(remote.remote)return remote.data!;return invoke<Job>("save_job", { job });}
   const jobs = JSON.parse(localStorage.getItem(jobStorageKey) ?? "[]") as Job[];
   const index = jobs.findIndex((item) => item.id === job.id);
+  const id = job.id ?? crypto.randomUUID();
+  let jobNumber = job.jobNumber?.trim() ?? "";
+  const numberTaken = (value: string) => jobs.some((item) => item.jobNumber === value && item.id !== id);
+  if (!jobNumber || numberTaken(jobNumber)) { let next = jobs.reduce((max, item) => { const match = /^JOB-(\d+)$/.exec(item.jobNumber ?? ""); return match ? Math.max(max, Number(match[1])) : max; }, 0) + 1; do { jobNumber = `JOB-${String(next++).padStart(5, "0")}`; } while (numberTaken(jobNumber)); }
   const saved = {
     ...job,
     title:job.items?.map(item=>item.title).filter(Boolean).slice(0,3).join(", ")||job.title,
