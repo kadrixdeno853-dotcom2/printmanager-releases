@@ -474,6 +474,13 @@ export async function saveQuotation(quotation: Quotation): Promise<Quotation> {
     localStorage.getItem(quotationStorageKey) ?? "[]",
   ) as Quotation[];
   const index = quotations.findIndex((item) => item.id === quotation.id);
+  const id = job.id ?? crypto.randomUUID();
+  let jobNumber = job.jobNumber?.trim() ?? "";
+  const numberTaken = (value: string) => jobs.some((item) => item.jobNumber === value && item.id !== id);
+  if (!jobNumber || numberTaken(jobNumber)) {
+    let next = jobs.reduce((max, item) => { const match = /^JOB-(\d+)$/.exec(item.jobNumber ?? ""); return match ? Math.max(max, Number(match[1])) : max; }, 0) + 1;
+    do { jobNumber = `JOB-${String(next++).padStart(5, "0")}`; } while (numberTaken(jobNumber));
+  }
   const saved = {
     ...quotation,
     id: quotation.id ?? crypto.randomUUID(),
@@ -573,10 +580,9 @@ export async function saveJob(job: Job): Promise<Job> {
     title:job.items?.map(item=>item.title).filter(Boolean).slice(0,3).join(", ")||job.title,
     description:job.items?.length?`${job.items.length} work item${job.items.length===1?"":"s"}`:job.description,
     totalAmount:job.items?.length?job.items.reduce((sum,item)=>sum+item.total,0):job.totalAmount,
-    id: job.id ?? crypto.randomUUID(),
+    id,
     createdAt:job.createdAt??new Date().toISOString(),
-    jobNumber:
-      job.jobNumber ?? `JOB-${String(jobs.length + 1).padStart(5, "0")}`,
+    jobNumber,
   };
   if (index >= 0) jobs[index] = saved;
   else jobs.push(saved);

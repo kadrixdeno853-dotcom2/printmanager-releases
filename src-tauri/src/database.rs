@@ -997,15 +997,17 @@ impl Database {
 
     pub fn save_job(&mut self, mut job: Job) -> Result<Job, DatabaseError> {
         let id = job.id.clone().unwrap_or_else(|| Uuid::new_v4().to_string());
-        let number = match job.job_number.clone() {
-            Some(value) if !value.is_empty() => value,
-            _ => {
-                let sequence: i64 =
-                    self.connection
-                        .query_row("SELECT COUNT(*) + 1 FROM jobs", [], |row| row.get(0))?;
-                format!("JOB-{:05}", sequence)
+        let mut number = job.job_number.clone().filter(|value| !value.trim().is_empty()).unwrap_or_default();
+        let existing_id: Option<String> = self.connection.query_row("SELECT id FROM jobs WHERE job_number=?1 LIMIT 1", params![number], |row| row.get(0)).optional()?;
+        if number.is_empty() || existing_id.as_deref().is_some_and(|existing| existing != id) {
+            let mut sequence: i64 = self.connection.query_row("SELECT COALESCE(MAX(CAST(SUBSTR(job_number,5) AS INTEGER)),0)+1 FROM jobs WHERE job_number LIKE 'JOB-%'", [], |row| row.get(0))?;
+            loop {
+                number = format!("JOB-{:05}", sequence);
+                let taken: bool = self.connection.query_row("SELECT EXISTS(SELECT 1 FROM jobs WHERE job_number=?1 AND id<>?2)", params![number,id], |row| row.get(0))?;
+                if !taken { break; }
+                sequence += 1;
             }
-        };
+        }
         if !job.items.is_empty() {
             job.title = job
                 .items
