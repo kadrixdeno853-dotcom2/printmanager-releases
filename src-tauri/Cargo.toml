@@ -1,6 +1,6 @@
 [package]
 name = "print-manager"
-version = "0.5.25"
+version = "0.5.26"
 description = "Offline-first printing business management system"
 authors = ["Qatlex"]
 edition = "2021"
