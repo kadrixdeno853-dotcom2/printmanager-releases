@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useRef, useState } from "react";
+﻿import { FormEvent, useEffect, useRef, useState } from "react";
 import {
   CalendarClock,
   Calculator,
@@ -28,6 +28,7 @@ import {
   listUsers,
   deleteRecord,
   saveJob,
+  saveCustomer,
   updateJobStatus,
 } from "./lib/desktop";
 import { notifyActivity } from "./lib/activity";
@@ -217,12 +218,12 @@ export default function JobsPage({
       });
       notifyActivity({
         title: `${saved.jobNumber || "Print job"} ${wasEditing ? "updated" : "created"}`,
-        detail: `${saved.customerName || "Walk-in customer"} · ${saved.title}`,
+        detail: `${saved.customerName || "Walk-in customer"} Â· ${saved.title}`,
         page: "Jobs",
         tone: "info",
       });
       const usedMaterialIds=new Set(items.map(item=>item.inventoryItemId).filter(Boolean));
-      if(usedMaterialIds.size){const refreshed=await listInventory();setMaterials(refreshed);for(const material of refreshed.filter(item=>usedMaterialIds.has(item.id))){const low=material.quantity<=material.reorderLevel;notifyActivity({title:low?`${material.name} is running low`:`${material.name} stock updated`,detail:`${material.quantity.toLocaleString("en-UG")} ${material.unit} remaining · ${(material.totalPrinted??0).toLocaleString("en-UG")} ${material.unit} printed · ${(material.totalWaste??0).toLocaleString("en-UG")} ${material.unit} lost`,page:"Inventory",tone:low?"warning":"info"});}}
+      if(usedMaterialIds.size){const refreshed=await listInventory();setMaterials(refreshed);for(const material of refreshed.filter(item=>usedMaterialIds.has(item.id))){const low=material.quantity<=material.reorderLevel;notifyActivity({title:low?`${material.name} is running low`:`${material.name} stock updated`,detail:`${material.quantity.toLocaleString("en-UG")} ${material.unit} remaining Â· ${(material.totalPrinted??0).toLocaleString("en-UG")} ${material.unit} printed Â· ${(material.totalWaste??0).toLocaleString("en-UG")} ${material.unit} lost`,page:"Inventory",tone:low?"warning":"info"});}}
       setEditing(null);
       await load();
     } catch (reason) {
@@ -326,6 +327,17 @@ export default function JobsPage({
     }
     return (b.createdAt || "").localeCompare(a.createdAt || "");
   });
+  const createCustomerFromSearch = async () => {
+    const name = customerQuery.trim();
+    if (!name) return;
+    try {
+      const customer = await saveCustomer({ name, company: "", phone: "", email: "", address: "", tin: "", creditLimit: 0, notes: "" });
+      setCustomers((current) => [...current, customer]);
+      update("customerId", customer.id ?? null);
+      setCustomerQuery(customer.name);
+      setCustomerPickerOpen(false);
+    } catch (reason) { setError(String(reason)); }
+  };
   const matchingCustomers = customers
     .filter((customer) => {
       const query = customerQuery.trim().toLowerCase();
@@ -344,7 +356,7 @@ export default function JobsPage({
         <input
           value={search}
           onChange={(event) => setSearch(event.target.value)}
-          placeholder="Search job, customer or description…"
+          placeholder="Search job, customer or descriptionâ€¦"
         />
       </div>
       <div className="toolbar-filters">
@@ -370,7 +382,7 @@ export default function JobsPage({
           <option value="yesterday">Created yesterday</option>
           <option value="7days">Last 7 days</option>
           <option value="3months">Last 3 months</option>
-          <option value="custom">Custom date…</option>
+          <option value="custom">Custom dateâ€¦</option>
         </select>
         {createdFilter === "custom" && (
           <input
@@ -426,7 +438,7 @@ export default function JobsPage({
           <h1>{board ? "Production board" : "Print Jobs"}</h1>
           <p>
             {board
-              ? "See every job’s current stage and move work through production."
+              ? "See every jobâ€™s current stage and move work through production."
               : "Plan, assign and track work from order to delivery."}
           </p>
         </div>
@@ -501,7 +513,7 @@ export default function JobsPage({
           <input
             value={search}
             onChange={(event) => setSearch(event.target.value)}
-            placeholder="Search job, customer or description…"
+            placeholder="Search job, customer or descriptionâ€¦"
           />
         </div>
         <span>{jobs.length} jobs</span>
@@ -687,16 +699,16 @@ export default function JobsPage({
                     onBlur={() =>
                       window.setTimeout(() => setCustomerPickerOpen(false), 120)
                     }
-                    placeholder="Search customer by name, company or phone…"
+                    placeholder="Search customer by name, company or phoneâ€¦"
                     autoComplete="off"
                   />
                   {editing.customerId && (
-                    <span className="customer-selected-check">✓ Selected</span>
+                    <span className="customer-selected-check">âœ“ Selected</span>
                   )}
                   {customerPickerOpen && (
                     <div className="customer-combobox-results">
                       {matchingCustomers.length === 0 ? (
-                        <p>No customers match “{customerQuery}”</p>
+                        <><button type="button" className="customer-create-option" onMouseDown={(event) => event.preventDefault()} onClick={() => void createCustomerFromSearch()}><Plus size={15} /><span><strong>+ New customer</strong><small>Create “{customerQuery}” and select them</small></span></button></>
                       ) : (
                         matchingCustomers.map((customer) => (
                           <button
@@ -717,7 +729,7 @@ export default function JobsPage({
                               <small>
                                 {[customer.company, customer.phone]
                                   .filter(Boolean)
-                                  .join(" · ") || "Customer"}
+                                  .join(" Â· ") || "Customer"}
                               </small>
                             </div>
                           </button>
@@ -785,7 +797,7 @@ export default function JobsPage({
                           onChange={(event) =>
                             updateItem(index, "workType", event.target.value)
                           }
-                          placeholder="Banner, stickers, cards…"
+                          placeholder="Banner, stickers, cardsâ€¦"
                         />
                       </label>
                     </div>
@@ -797,7 +809,7 @@ export default function JobsPage({
                         onChange={(event) =>
                           updateItem(index, "description", event.target.value)
                         }
-                        placeholder="Material, finishing, artwork and production instructions…"
+                        placeholder="Material, finishing, artwork and production instructionsâ€¦"
                       />
                     </label>
                     <div className="work-item-measures">
@@ -876,7 +888,7 @@ export default function JobsPage({
                           onChange={(event) => {manualMaterialIndexes.current.add(index);updateItem(index, "inventoryItemId", event.target.value || null)}}
                         >
                           <option value="">No stock material selected</option>
-                          {materials.filter(material=>material.isActive).map(material=><option key={material.id} value={material.id ?? ""}>{material.name} · {material.quantity.toLocaleString("en-UG")} {material.unit} remaining</option>)}
+                          {materials.filter(material=>material.isActive).map(material=><option key={material.id} value={material.id ?? ""}>{material.name} Â· {material.quantity.toLocaleString("en-UG")} {material.unit} remaining</option>)}
                         </select>
                       </label>
                       {item.inventoryItemId&&(()=>{const material=materials.find(entry=>entry.id===item.inventoryItemId);const used=automaticMaterialUsage(item,material);const smart=!manualMaterialIndexes.current.has(index);return <div className="automatic-material-preview">{smart&&<em className="smart-material-match"><Sparkles/> Smart inventory match</em>}<small>Automatic material calculation</small><strong>{used.toLocaleString("en-UG")} {material?.unit} will be used</strong><span>{Math.max(0,(material?.quantity??0)-used).toLocaleString("en-UG")} {material?.unit} remaining after this job</span></div>})()}
@@ -929,7 +941,7 @@ export default function JobsPage({
                 <input
                   value={editing.title}
                   onChange={(e) => update("title", e.target.value)}
-                  placeholder="e.g. Outdoor banner — 3 copies"
+                  placeholder="e.g. Outdoor banner â€” 3 copies"
                 />
               </label>
               <label className="legacy-job-field">
@@ -938,7 +950,7 @@ export default function JobsPage({
                   rows={3}
                   value={editing.description}
                   onChange={(e) => update("description", e.target.value)}
-                  placeholder="Materials, finishing and artwork instructions…"
+                  placeholder="Materials, finishing and artwork instructionsâ€¦"
                 />
               </label>
               <div className="form-row">
@@ -997,7 +1009,7 @@ export default function JobsPage({
                     <option value="">Unassigned</option>
                     {staff.map((employee) => (
                       <option key={employee.id || employee.username} value={employee.fullName}>
-                        {employee.fullName} · {employee.role.replaceAll("_", " ")}
+                        {employee.fullName} Â· {employee.role.replaceAll("_", " ")}
                       </option>
                     ))}
                   </select>
@@ -1068,7 +1080,7 @@ export default function JobsPage({
                 Cancel
               </button>
               <button type="submit" className="setup-next" disabled={saving}>
-                {saving ? "Saving…" : "Save print job"}
+                {saving ? "Savingâ€¦" : "Save print job"}
               </button>
             </div>
           </form>
@@ -1086,7 +1098,7 @@ export default function JobsPage({
           const factor = { mm: 0.001, cm: 0.01, m: 1 }[unit];
           return (
             <AdvancedPricingCalculator
-              title={`Pricing · Work item ${pricingIndex + 1}`}
+              title={`Pricing Â· Work item ${pricingIndex + 1}`}
               initialDimensionUnit={unit}
               item={{
                 description: item.title || "New work item",
