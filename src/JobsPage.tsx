@@ -121,6 +121,7 @@ export default function JobsPage({
   const [customerPickerOpen, setCustomerPickerOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [receipt, setReceipt] = useState<Job | null>(null);
   const printReceipt = (job: Job) => {
     const w = window.open("", "_blank"); if (!w) return;
     w.document.write(`<html><head><title>Receipt ${job.jobNumber}</title><style>body{font:14px Arial;padding:36px;color:#20312a}h1{color:#277d54}table{width:100%;margin-top:20px}td{padding:8px;border-bottom:1px solid #ddd}td:last-child{text-align:right}</style></head><body><h1>PrintManager</h1><h2>Receipt ${job.jobNumber}</h2><p>Customer: ${job.customerName || "Walk-in customer"}</p><table><tr><td>${job.title}</td><td>UGX ${job.totalAmount.toLocaleString("en-UG")}</td></tr></table><h2 style="text-align:right">Total: UGX ${job.totalAmount.toLocaleString("en-UG")}</h2><p>Thank you for your business.</p></body></html>`); w.document.close(); w.print();
@@ -229,7 +230,7 @@ export default function JobsPage({
       const usedMaterialIds=new Set(items.map(item=>item.inventoryItemId).filter(Boolean));
       if(usedMaterialIds.size){const refreshed=await listInventory();setMaterials(refreshed);for(const material of refreshed.filter(item=>usedMaterialIds.has(item.id))){const low=material.quantity<=material.reorderLevel;notifyActivity({title:low?`${material.name} is running low`:`${material.name} stock updated`,detail:`${material.quantity.toLocaleString("en-UG")} ${material.unit} remaining  ${(material.totalPrinted??0).toLocaleString("en-UG")} ${material.unit} printed  ${(material.totalWaste??0).toLocaleString("en-UG")} ${material.unit} lost`,page:"Inventory",tone:low?"warning":"info"});}}
       setEditing(null);
-      if (!wasEditing) window.setTimeout(() => printReceipt(saved), 100);
+      if (!wasEditing) setReceipt(saved);
       await load();
     } catch (reason) {
       const detail = String(reason).replace(/^Error:\s*/, "");
@@ -1136,6 +1137,7 @@ export default function JobsPage({
             />
           );
         })()}
+    {receipt && <div className="modal-backdrop"><section className="receipt-preview"><header><div><small>PRINTMANAGER RECEIPT</small><h2>Receipt {receipt.jobNumber}</h2></div><button type="button" onClick={() => setReceipt(null)}>Close</button></header><p><strong>Customer:</strong> {receipt.customerName || "Walk-in customer"}</p><p><strong>Job:</strong> {receipt.title}</p><div className="receipt-preview-total"><span>Total amount</span><strong>UGX {receipt.totalAmount.toLocaleString("en-UG")}</strong></div><footer><button type="button" onClick={() => setReceipt(null)}>Done</button><button type="button" className="setup-next" onClick={() => window.print()}>Print receipt</button></footer></section></div>}
     </>
   );
 }
