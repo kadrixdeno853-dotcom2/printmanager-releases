@@ -218,12 +218,12 @@ export default function JobsPage({
       });
       notifyActivity({
         title: `${saved.jobNumber || "Print job"} ${wasEditing ? "updated" : "created"}`,
-        detail: `${saved.customerName || "Walk-in customer"} Â· ${saved.title}`,
+        detail: `${saved.customerName || "Walk-in customer"} · ${saved.title}`,
         page: "Jobs",
         tone: "info",
       });
       const usedMaterialIds=new Set(items.map(item=>item.inventoryItemId).filter(Boolean));
-      if(usedMaterialIds.size){const refreshed=await listInventory();setMaterials(refreshed);for(const material of refreshed.filter(item=>usedMaterialIds.has(item.id))){const low=material.quantity<=material.reorderLevel;notifyActivity({title:low?`${material.name} is running low`:`${material.name} stock updated`,detail:`${material.quantity.toLocaleString("en-UG")} ${material.unit} remaining Â· ${(material.totalPrinted??0).toLocaleString("en-UG")} ${material.unit} printed Â· ${(material.totalWaste??0).toLocaleString("en-UG")} ${material.unit} lost`,page:"Inventory",tone:low?"warning":"info"});}}
+      if(usedMaterialIds.size){const refreshed=await listInventory();setMaterials(refreshed);for(const material of refreshed.filter(item=>usedMaterialIds.has(item.id))){const low=material.quantity<=material.reorderLevel;notifyActivity({title:low?`${material.name} is running low`:`${material.name} stock updated`,detail:`${material.quantity.toLocaleString("en-UG")} ${material.unit} remaining · ${(material.totalPrinted??0).toLocaleString("en-UG")} ${material.unit} printed · ${(material.totalWaste??0).toLocaleString("en-UG")} ${material.unit} lost`,page:"Inventory",tone:low?"warning":"info"});}}
       setEditing(null);
       await load();
     } catch (reason) {
@@ -356,7 +356,7 @@ export default function JobsPage({
         <input
           value={search}
           onChange={(event) => setSearch(event.target.value)}
-          placeholder="Search job, customer or descriptionâ€¦"
+          placeholder="Search job, customer or description..."
         />
       </div>
       <div className="toolbar-filters">
@@ -382,7 +382,7 @@ export default function JobsPage({
           <option value="yesterday">Created yesterday</option>
           <option value="7days">Last 7 days</option>
           <option value="3months">Last 3 months</option>
-          <option value="custom">Custom dateâ€¦</option>
+          <option value="custom">Custom date...</option>
         </select>
         {createdFilter === "custom" && (
           <input
@@ -513,7 +513,7 @@ export default function JobsPage({
           <input
             value={search}
             onChange={(event) => setSearch(event.target.value)}
-            placeholder="Search job, customer or descriptionâ€¦"
+            placeholder="Search job, customer or description..."
           />
         </div>
         <span>{jobs.length} jobs</span>
@@ -699,11 +699,11 @@ export default function JobsPage({
                     onBlur={() =>
                       window.setTimeout(() => setCustomerPickerOpen(false), 120)
                     }
-                    placeholder="Search customer by name, company or phoneâ€¦"
+                    placeholder="Search customer by name, company or phone..."
                     autoComplete="off"
                   />
                   {editing.customerId && (
-                    <span className="customer-selected-check">âœ“ Selected</span>
+                    <span className="customer-selected-check">✓ Selected</span>
                   )}
                   {customerPickerOpen && (
                     <div className="customer-combobox-results">
@@ -729,7 +729,7 @@ export default function JobsPage({
                               <small>
                                 {[customer.company, customer.phone]
                                   .filter(Boolean)
-                                  .join(" Â· ") || "Customer"}
+                                  .join(" · ") || "Customer"}
                               </small>
                             </div>
                           </button>
@@ -797,7 +797,7 @@ export default function JobsPage({
                           onChange={(event) =>
                             updateItem(index, "workType", event.target.value)
                           }
-                          placeholder="Banner, stickers, cardsâ€¦"
+                          placeholder="Banner, stickers, cards..."
                         />
                       </label>
                     </div>
@@ -809,7 +809,7 @@ export default function JobsPage({
                         onChange={(event) =>
                           updateItem(index, "description", event.target.value)
                         }
-                        placeholder="Material, finishing, artwork and production instructionsâ€¦"
+                        placeholder="Material, finishing, artwork and production instructions..."
                       />
                     </label>
                     <div className="work-item-measures">
@@ -888,7 +888,7 @@ export default function JobsPage({
                           onChange={(event) => {manualMaterialIndexes.current.add(index);updateItem(index, "inventoryItemId", event.target.value || null)}}
                         >
                           <option value="">No stock material selected</option>
-                          {materials.filter(material=>material.isActive).map(material=><option key={material.id} value={material.id ?? ""}>{material.name} Â· {material.quantity.toLocaleString("en-UG")} {material.unit} remaining</option>)}
+                          {materials.filter(material=>material.isActive).map(material=><option key={material.id} value={material.id ?? ""}>{material.name} · {material.quantity.toLocaleString("en-UG")} {material.unit} remaining</option>)}
                         </select>
                       </label>
                       {item.inventoryItemId&&(()=>{const material=materials.find(entry=>entry.id===item.inventoryItemId);const used=automaticMaterialUsage(item,material);const smart=!manualMaterialIndexes.current.has(index);return <div className="automatic-material-preview">{smart&&<em className="smart-material-match"><Sparkles/> Smart inventory match</em>}<small>Automatic material calculation</small><strong>{used.toLocaleString("en-UG")} {material?.unit} will be used</strong><span>{Math.max(0,(material?.quantity??0)-used).toLocaleString("en-UG")} {material?.unit} remaining after this job</span></div>})()}
@@ -950,7 +950,7 @@ export default function JobsPage({
                   rows={3}
                   value={editing.description}
                   onChange={(e) => update("description", e.target.value)}
-                  placeholder="Materials, finishing and artwork instructionsâ€¦"
+                  placeholder="Materials, finishing and artwork instructions..."
                 />
               </label>
               <div className="form-row">
@@ -1009,7 +1009,7 @@ export default function JobsPage({
                     <option value="">Unassigned</option>
                     {staff.map((employee) => (
                       <option key={employee.id || employee.username} value={employee.fullName}>
-                        {employee.fullName} Â· {employee.role.replaceAll("_", " ")}
+                        {employee.fullName} · {employee.role.replaceAll("_", " ")}
                       </option>
                     ))}
                   </select>
@@ -1080,7 +1080,7 @@ export default function JobsPage({
                 Cancel
               </button>
               <button type="submit" className="setup-next" disabled={saving}>
-                {saving ? "Savingâ€¦" : "Save print job"}
+                {saving ? "Saving..." : "Save print job"}
               </button>
             </div>
           </form>
@@ -1098,7 +1098,7 @@ export default function JobsPage({
           const factor = { mm: 0.001, cm: 0.01, m: 1 }[unit];
           return (
             <AdvancedPricingCalculator
-              title={`Pricing Â· Work item ${pricingIndex + 1}`}
+              title={`Pricing · Work item ${pricingIndex + 1}`}
               initialDimensionUnit={unit}
               item={{
                 description: item.title || "New work item",
