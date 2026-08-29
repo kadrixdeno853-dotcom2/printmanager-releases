@@ -1,4 +1,4 @@
-﻿import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import {
   Activity,
   Building2,
@@ -47,12 +47,12 @@ export default function SettingsPage({
   const accountingTotal=Object.values(accountingRules).reduce((sum:number,value)=>sum+Number(value||0),0);
   const updateAccountingRule=(key:string,value:number)=>setAccountingRules((current:any)=>({...current,[key]:Math.max(0,Math.min(100,Number.isFinite(value)?value:0))}));
   const saveAccountingRules=()=>{if(Math.round(accountingTotal)!==100){setMessage("Accounting allocation percentages must total 100%.");return}localStorage.setItem("printmanager.accounting-rules",JSON.stringify(accountingRules));setMessage("Accounting allocation rules saved.");notifyActivity({title:"Accounting rules updated",detail:"Daily collection allocation percentages were saved.",page:"Settings",tone:"info"})};
-  const [network,setNetwork]=useState<CompanyNetworkStatus>({mode:"local",serverAddress:"",joinCode:"",connected:false,message:"Checking company networkâ€¦"});
+  const [network,setNetwork]=useState<CompanyNetworkStatus>({mode:"local",serverAddress:"",joinCode:"",connected:false,message:"Checking company network"});
   const [networkBusy,setNetworkBusy]=useState(false);
   const [networkMessage,setNetworkMessage]=useState("");
   const chooseTheme=(value:AppTheme)=>{setTheme(value);applyTheme(value);notifyActivity({title:"Colour theme changed",detail:`${themes.find(item=>item.id===value)?.name||value} theme applied.`,page:"Settings",tone:"info"})};
   const saveDailyReport=()=>{localStorage.setItem("printmanager.daily-report",JSON.stringify(dailyReport));setMessage("Daily CEO report preferences saved.");notifyActivity({title:"Daily CEO report updated",detail:dailyReport.enabled?`Reports are scheduled for ${dailyReport.sendTime}.` : "Automatic reports are paused.",page:"Settings",tone:"info"})};
-  const testDailyReport=async()=>{if(!dailyReport.recipient){setMessage("Enter the CEO email address first.");return}setMessage("Sending test reportâ€¦");try{await sendDailyReport(dailyReport);localStorage.removeItem("printmanager.daily-report-last-sent");setMessage("Test report sent. Check the recipient inbox and spam folder.");}catch(reason){setMessage(`Report test failed: ${String(reason)}`)}};
+  const testDailyReport=async()=>{if(!dailyReport.recipient){setMessage("Enter the CEO email address first.");return}setMessage("Sending test report");try{await sendDailyReport(dailyReport);localStorage.removeItem("printmanager.daily-report-last-sent");setMessage("Test report sent. Check the recipient inbox and spam folder.");}catch(reason){setMessage(`Report test failed: ${String(reason)}`)}};
   useEffect(() => {
     void listAuditEntries().then(setAudit);
     void getCompanyNetworkStatus().then(setNetwork).catch(reason=>setNetworkMessage(String(reason)));
@@ -194,7 +194,7 @@ export default function SettingsPage({
             )}
             <button className="primary-button" disabled={saving}>
               <Save />
-              {saving ? "Savingâ€¦" : "Save settings"}
+              {saving ? "Saving" : "Save settings"}
             </button>
           </form>
           <section className="settings-card appearance-settings">
@@ -214,7 +214,7 @@ export default function SettingsPage({
           </section>
           <section className="settings-card network-settings">
             <header><span className="network-heading-icon"><Network/></span><div><small>OFFICE COLLABORATION</small><h2>Company network</h2><p>Connect your team securely on the same Wi-Fi or LAN.</p></div><span className={`network-state ${network.connected?"online":""}`}><i/>{network.connected?"Connected":"Not connected"}</span></header>
-            <div className="network-section-label"><span>1</span><div><strong>Choose this computerâ€™s role</strong><small>You can change it later without deleting business data.</small></div></div>
+            <div className="network-section-label"><span>1</span><div><strong>Choose this computers role</strong><small>You can change it later without deleting business data.</small></div></div>
             <div className="network-mode-options">
               <button type="button" className={network.mode==="host"?"active":""} onClick={()=>setNetwork({...network,mode:"host"})}><span className="network-mode-icon"><Server/></span><span><strong>Owner computer</strong><small>Stores and shares company data</small></span><i className="network-choice" aria-hidden="true"/></button>
               <button type="button" className={network.mode==="client"?"active":""} onClick={()=>setNetwork({...network,mode:"client"})}><span className="network-mode-icon"><Monitor/></span><span><strong>Employee computer</strong><small>Connects to the shared workspace</small></span><i className="network-choice" aria-hidden="true"/></button>
@@ -223,7 +223,7 @@ export default function SettingsPage({
             {network.mode==="host"&&<div className="network-details"><label><span>Server address<small>Office network address</small></span><input readOnly value={network.serverAddress||"Click Generate connection details"}/></label><label><span>Company join code<small>Keep this code private</small></span><input className="join-code-input" readOnly value={network.joinCode||"Click Generate connection details"}/></label><p><ShieldCheck/> {network.joinCode?"Share the address and code only with your employees.":"Generate the private code once, then keep this computer switched on while employees work."}</p></div>}
             {network.mode==="client"&&<div className="network-details"><label><span>Owner computer address<small>Including port 47831</small></span><input placeholder="192.168.1.20:47831" value={network.serverAddress} onChange={event=>setNetwork({...network,serverAddress:event.target.value})}/></label><label><span>Company join code<small>Provided by the owner</small></span><input className="join-code-input" placeholder="8-character code" value={network.joinCode} onChange={event=>setNetwork({...network,joinCode:event.target.value.toUpperCase()})}/></label></div>}
             {networkMessage&&<p className="network-message">{networkMessage}</p>}
-            <div className="network-actions"><span><ShieldCheck/> Private office connection</span><button type="button" disabled={networkBusy} onClick={()=>void saveNetwork()}><Network/>{networkBusy?"Preparingâ€¦":network.mode==="host"?(network.joinCode?"Restart company server":"Generate connection details"):network.mode==="client"?"Connect computer":"Save"}</button></div>
+            <div className="network-actions"><span><ShieldCheck/> Private office connection</span><button type="button" disabled={networkBusy} onClick={()=>void saveNetwork()}><Network/>{networkBusy?"Preparing":network.mode==="host"?(network.joinCode?"Restart company server":"Generate connection details"):network.mode==="client"?"Connect computer":"Save"}</button></div>
           </section>
           <section className="settings-card recovery-settings">
             <header>

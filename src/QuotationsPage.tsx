@@ -121,7 +121,7 @@ function SearchPicker({
         placeholder={placeholder}
         autoComplete="off"
       />
-      {value && <span className="quote-picker-selected">✓ Selected</span>}
+      {value && <span className="quote-picker-selected"> Selected</span>}
       {open && (
         <div className="quote-picker-results">
           {customLabel && (
@@ -275,7 +275,7 @@ export default function QuotationsPage() {
       });
       notifyActivity({
         title: `${saved.quotationNumber || "Quotation"} ${wasEditing ? "updated" : "created"}`,
-        detail: `${saved.customerName || "Customer"} · UGX ${saved.total.toLocaleString("en-UG")}`,
+        detail: `${saved.customerName || "Customer"}  UGX ${saved.total.toLocaleString("en-UG")}`,
         page: "Quotations",
         tone: "info",
       });
@@ -313,7 +313,7 @@ export default function QuotationsPage() {
       setMessage(`${jobNumber} was created successfully.`);
       notifyActivity({
         title: `${jobNumber} created from quotation`,
-        detail: `${preview.customerName || "Customer"} · ready for production planning`,
+        detail: `${preview.customerName || "Customer"}  ready for production planning`,
         page: "Jobs",
         tone: "info",
       });
@@ -375,7 +375,7 @@ export default function QuotationsPage() {
           <input
             value={search}
             onChange={(event) => setSearch(event.target.value)}
-            placeholder="Search quotation, customer or status…"
+            placeholder="Search quotation, customer or status"
           />
         </div>
         <span>{visible.length} quotations</span>
@@ -460,7 +460,7 @@ export default function QuotationsPage() {
                 </span>
                 <div>
                   <h2>New quotation</h2>
-                  <p>Draft • Number assigned when saved</p>
+                  <p>Draft  Number assigned when saved</p>
                 </div>
               </div>
               <button type="button" onClick={() => setEditing(null)}>
@@ -474,7 +474,7 @@ export default function QuotationsPage() {
                   <SearchPicker
                     required
                     value={editing.customerId ?? ""}
-                    placeholder="Search customer by name, company or phone…"
+                    placeholder="Search customer by name, company or phone"
                     onSelect={(value) => updateQuote("customerId", value)}
                     options={customers.map((customer) => ({
                       value: customer.id ?? "",
@@ -482,7 +482,7 @@ export default function QuotationsPage() {
                       detail:
                         [customer.company, customer.phone]
                           .filter(Boolean)
-                          .join(" · ") || "Customer",
+                          .join("  ") || "Customer",
                       keywords: customer.email,
                     }))}
                   />
@@ -540,13 +540,13 @@ export default function QuotationsPage() {
                         Product or service
                         <SearchPicker
                           value={item.productId ?? ""}
-                          placeholder="Search product or choose custom item…"
+                          placeholder="Search product or choose custom item"
                           customLabel="Custom item"
                           onSelect={(value) => chooseProduct(index, value)}
                           options={products.map((entry) => ({
                             value: entry.id ?? "",
                             label: entry.name,
-                            detail: `${entry.category || "Product"} · UGX ${entry.sellingPrice.toLocaleString("en-UG")}`,
+                            detail: `${entry.category || "Product"}  UGX ${entry.sellingPrice.toLocaleString("en-UG")}`,
                             keywords: `${entry.description} ${entry.unit}`,
                           }))}
                         />
@@ -637,7 +637,7 @@ export default function QuotationsPage() {
                         <div className="line-total">
                           <small>
                             {areaPriced
-                              ? `${((item.width ?? 0) * (item.height ?? 0) * item.quantity).toFixed(2)} m²`
+                              ? `${((item.width ?? 0) * (item.height ?? 0) * item.quantity).toFixed(2)} m`
                               : "Line total"}
                           </small>
                           <strong>
@@ -678,7 +678,7 @@ export default function QuotationsPage() {
                       rows={3}
                       value={editing.notes}
                       onChange={(e) => updateQuote("notes", e.target.value)}
-                      placeholder="Delivery, artwork or production notes…"
+                      placeholder="Delivery, artwork or production notes"
                     />
                   </label>
                   <label>
@@ -747,7 +747,7 @@ export default function QuotationsPage() {
                     saving || editing.items.some((item) => !item.description)
                   }
                 >
-                  {saving ? "Saving…" : "Save quotation"}
+                  {saving ? "Saving" : "Save quotation"}
                 </button>
               </span>
             </footer>

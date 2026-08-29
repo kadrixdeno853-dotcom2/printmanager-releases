@@ -92,7 +92,7 @@ export default function ExpensesPage() {
       const saved = await saveExpense(editing);
       notifyActivity({
         title: `Expense ${wasEditing ? "updated" : "recorded"}`,
-        detail: `${saved.description} · UGX ${saved.amount.toLocaleString("en-UG")}`,
+        detail: `${saved.description}  UGX ${saved.amount.toLocaleString("en-UG")}`,
         page: "Expenses",
         tone: "info",
       });
@@ -187,7 +187,7 @@ export default function ExpensesPage() {
           <input
             value={search}
             onChange={(event) => setSearch(event.target.value)}
-            placeholder="Search expense, category, payee or description…"
+            placeholder="Search expense, category, payee or description"
           />
         </div>
         <div className="toolbar-filters">
@@ -207,7 +207,7 @@ export default function ExpensesPage() {
             <option value="all">All dates</option>
             <option value="today">Today</option>
             <option value="month">This month</option>
-            <option value="custom">Custom date…</option>
+            <option value="custom">Custom date</option>
             <option value="job">Job-related only</option>
           </select>
           <select
@@ -360,7 +360,7 @@ export default function ExpensesPage() {
                   <option value="">General business expense</option>
                   {jobs.map((job) => (
                     <option key={job.id} value={job.id ?? ""}>
-                      {job.jobNumber} — {job.title}
+                      {job.jobNumber}  {job.title}
                     </option>
                   ))}
                 </select>
@@ -408,7 +408,7 @@ export default function ExpensesPage() {
                 Cancel
               </button>
               <button className="setup-next" disabled={saving}>
-                {saving ? "Saving…" : "Save expense"}
+                {saving ? "Saving" : "Save expense"}
               </button>
             </div>
           </form>

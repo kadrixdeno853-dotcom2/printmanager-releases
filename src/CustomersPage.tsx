@@ -68,7 +68,7 @@ export default function CustomersPage() {
       const saved = await saveCustomer(editing);
       notifyActivity({
         title: `Customer ${wasEditing ? "updated" : "created"}`,
-        detail: `${saved.name}${saved.company ? ` · ${saved.company}` : ""}`,
+        detail: `${saved.name}${saved.company ? `  ${saved.company}` : ""}`,
         page: "Customers",
         tone: "info",
       });
@@ -127,7 +127,7 @@ export default function CustomersPage() {
           <input
             value={search}
             onChange={(event) => setSearch(event.target.value)}
-            placeholder="Search by name, company or phone…"
+            placeholder="Search by name, company or phone"
           />
         </div>
         <span>
@@ -137,7 +137,7 @@ export default function CustomersPage() {
       <section className="customer-panel">
         {loading ? (
           <div className="customer-empty">
-            <p>Loading customers…</p>
+            <p>Loading customers</p>
           </div>
         ) : customers.length === 0 ? (
           <div className="customer-empty">
@@ -300,7 +300,7 @@ export default function CustomersPage() {
                 Cancel
               </button>
               <button className="setup-next" disabled={saving}>
-                {saving ? "Saving…" : "Save customer"}
+                {saving ? "Saving" : "Save customer"}
               </button>
             </div>
           </form>

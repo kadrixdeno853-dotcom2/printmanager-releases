@@ -68,7 +68,7 @@ export default function InvoicePreview({
                 <p>{business?.address}</p>
                 <p>
                   {business?.phone}
-                  {business?.email ? ` • ${business.email}` : ""}
+                  {business?.email ? `  ${business.email}` : ""}
                 </p>
                 {business?.tin && <p>TIN: {business.tin}</p>}
               </div>
@@ -166,7 +166,7 @@ export default function InvoicePreview({
                   <p>
                     <span>Discount</span>
                     <strong>
-                      − UGX {invoice.discount.toLocaleString("en-UG")}
+                       UGX {invoice.discount.toLocaleString("en-UG")}
                     </strong>
                   </p>
                 )}

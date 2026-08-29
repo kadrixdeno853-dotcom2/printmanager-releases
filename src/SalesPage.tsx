@@ -159,7 +159,7 @@ export default function SalesPage() {
       notifyActivity({
         id: `invoice-new-${saved.id}`,
         title: `${saved.invoiceNumber || "New invoice"} created successfully`,
-        detail: `${saved.customerName || "Walk-in customer"} · UGX ${saved.total.toLocaleString("en-UG")}`,
+        detail: `${saved.customerName || "Walk-in customer"}  UGX ${saved.total.toLocaleString("en-UG")}`,
         page: "Sales",
         tone: "info",
       });
@@ -290,7 +290,7 @@ export default function SalesPage() {
           <input
             value={search}
             onChange={(event) => setSearch(event.target.value)}
-            placeholder="Search invoice, customer or status…"
+            placeholder="Search invoice, customer or status"
           />
         </div>
         <span>{visible.length} invoices</span>
@@ -523,7 +523,7 @@ export default function SalesPage() {
                           )
                         }
                       >
-                        ×
+                        
                       </button>
                     )}
                   </div>
@@ -586,7 +586,7 @@ export default function SalesPage() {
                   Cancel
                 </button>
                 <button className="setup-next" disabled={saving}>
-                  {saving ? "Saving…" : "Save invoice"}
+                  {saving ? "Saving" : "Save invoice"}
                 </button>
               </span>
             </footer>
@@ -607,7 +607,7 @@ export default function SalesPage() {
                 <div>
                   <h2>Record payment</h2>
                   <p>
-                    {paying.invoiceNumber} • Balance UGX{" "}
+                    {paying.invoiceNumber}  Balance UGX{" "}
                     {paying.balance.toLocaleString("en-UG")}
                   </p>
                 </div>
@@ -687,7 +687,7 @@ export default function SalesPage() {
                 Cancel
               </button>
               <button className="setup-next" disabled={saving}>
-                {saving ? "Saving…" : "Record payment"}
+                {saving ? "Saving" : "Record payment"}
               </button>
             </div>
           </form>

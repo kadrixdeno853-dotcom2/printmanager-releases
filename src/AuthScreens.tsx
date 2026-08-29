@@ -231,7 +231,7 @@ export function LoginScreen({
             disabled={busy || !resetConfirmation}
           >
             {busy
-              ? "Resetting everything…"
+              ? "Resetting everything"
               : "Erase data and register a new company"}
             <ArrowRight />
           </button>
@@ -312,7 +312,7 @@ export function LoginScreen({
           </p>
         )}
         <button disabled={busy}>
-          {busy ? "Signing in…" : "Sign in"}
+          {busy ? "Signing in" : "Sign in"}
           <ArrowRight />
         </button>
         <div className="auth-links">
@@ -363,7 +363,7 @@ function AuthLayout({ children }: { children: React.ReactNode }) {
         <strong>PrintManager</strong>
       </div>
       <main>{children}</main>
-      <small>Offline business management • Local data protection</small>
+      <small>Offline business management  Local data protection</small>
     </div>
   );
 }

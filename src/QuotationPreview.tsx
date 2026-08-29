@@ -71,7 +71,7 @@ export default function QuotationPreview({
               <p>{business?.address}</p>
               <p>
                 {business?.phone}
-                {business?.email ? ` • ${business.email}` : ""}
+                {business?.email ? `  ${business.email}` : ""}
               </p>
               {business?.tin && <p>TIN: {business.tin}</p>}
             </div>
@@ -121,7 +121,7 @@ export default function QuotationPreview({
                   </td>
                   <td>
                     {item.width && item.height
-                      ? `${item.width}m × ${item.height}m`
+                      ? `${item.width}m  ${item.height}m`
                       : item.unit.replaceAll("_", " ")}
                   </td>
                   <td>{item.quantity}</td>
@@ -153,7 +153,7 @@ export default function QuotationPreview({
                 <p>
                   <span>Discount</span>
                   <strong>
-                    − UGX {quotation.discount.toLocaleString("en-UG")}
+                     UGX {quotation.discount.toLocaleString("en-UG")}
                   </strong>
                 </p>
               )}

@@ -889,7 +889,7 @@ export async function saveInventoryItem(
   }
   notifyActivity({
     title: `Material ${wasEditing ? "updated" : "created"}`,
-    detail: `${saved.name} · ${saved.quantity} ${saved.unit}`,
+    detail: `${saved.name}  ${saved.quantity} ${saved.unit}`,
     page: "Inventory",
     tone: "info",
   });
@@ -926,11 +926,11 @@ export async function recordPurchase(purchase: Purchase): Promise<Purchase> {
     purchases.push(saved);
     localStorage.setItem(purchaseStorageKey, JSON.stringify(purchases));
     localStorage.setItem(inventoryStorageKey, JSON.stringify(inventory));
-    const expenses=JSON.parse(localStorage.getItem(expenseStorageKey)??"[]") as Expense[];expenses.push({id:crypto.randomUUID(),expenseNumber:`EXP-${String(expenses.length+1).padStart(5,"0")}`,purchaseId:saved.id,category:"Materials",payee:saved.supplierName||"Material supplier",description:`Material purchase ${saved.purchaseNumber}`,amount:saved.total,amountPaid:saved.amountPaid??0,dueDate:saved.dueDate??"",paymentStatus:saved.paymentStatus,expenseDate:saved.purchaseDate,paymentMethod:saved.paymentMethod,reference:saved.reference,notes:`Automatically recorded from purchasing · UGX ${(saved.amountPaid??0).toLocaleString("en-UG")} paid · UGX ${(saved.total-(saved.amountPaid??0)).toLocaleString("en-UG")} payable`});localStorage.setItem(expenseStorageKey,JSON.stringify(expenses));
+    const expenses=JSON.parse(localStorage.getItem(expenseStorageKey)??"[]") as Expense[];expenses.push({id:crypto.randomUUID(),expenseNumber:`EXP-${String(expenses.length+1).padStart(5,"0")}`,purchaseId:saved.id,category:"Materials",payee:saved.supplierName||"Material supplier",description:`Material purchase ${saved.purchaseNumber}`,amount:saved.total,amountPaid:saved.amountPaid??0,dueDate:saved.dueDate??"",paymentStatus:saved.paymentStatus,expenseDate:saved.purchaseDate,paymentMethod:saved.paymentMethod,reference:saved.reference,notes:`Automatically recorded from purchasing  UGX ${(saved.amountPaid??0).toLocaleString("en-UG")} paid  UGX ${(saved.total-(saved.amountPaid??0)).toLocaleString("en-UG")} payable`});localStorage.setItem(expenseStorageKey,JSON.stringify(expenses));
   }
   notifyActivity({
     title: `${saved.purchaseNumber || "Purchase"} recorded`,
-    detail: `Stock increased · UGX ${saved.total.toLocaleString("en-UG")} added to Expenses`,
+    detail: `Stock increased  UGX ${saved.total.toLocaleString("en-UG")} added to Expenses`,
     page: "Inventory",
     tone: "info",
   });
@@ -951,7 +951,7 @@ export async function recordSupplierPayment(payment: { purchaseId: string; amoun
     localStorage.setItem(purchaseStorageKey, JSON.stringify(purchases));
     const expenses=JSON.parse(localStorage.getItem(expenseStorageKey)??"[]") as Expense[];const linked=expenses.find(expense=>expense.purchaseId===purchase.id);if(linked){linked.amountPaid=purchase.amountPaid;linked.paymentStatus=purchase.paymentStatus;linked.paymentMethod=payment.paymentMethod;if(payment.reference)linked.reference=payment.reference;localStorage.setItem(expenseStorageKey,JSON.stringify(expenses));}
   }
-  notifyActivity({ title: "Supplier payment recorded", detail: `UGX ${payment.amount.toLocaleString("en-UG")} paid · supplier balance updated`, page: "Inventory", tone: "info" });
+  notifyActivity({ title: "Supplier payment recorded", detail: `UGX ${payment.amount.toLocaleString("en-UG")} paid  supplier balance updated`, page: "Inventory", tone: "info" });
 }
 export async function consumeStock(usage: StockUsage): Promise<void> {
   const inventory = await listInventory();
@@ -1065,7 +1065,7 @@ export async function saveUser(input: UserInput): Promise<User> {
   const saved = remote.remote?remote.data!:isDesktop()?await invoke<User>("save_user", { input }):await browserSaveUser(input);
   notifyActivity({
     title: `Employee ${wasEditing ? "updated" : "account created"}`,
-    detail: `${saved.fullName} · ${saved.role}`,
+    detail: `${saved.fullName}  ${saved.role}`,
     page: "Employees",
     tone: "info",
   });
