@@ -1,4 +1,4 @@
-import { openUrl as openExternal } from "@tauri-apps/plugin-opener";
+﻿import { openUrl as openExternal } from "@tauri-apps/plugin-opener";
 import { useEffect, useMemo, useRef, useState } from "react";
 import "./delete.css";
 import "./material-tracking.css";
@@ -955,6 +955,7 @@ function App() {
             <JobsPage
               createRequest={newJobRequest}
               initialCustomerId={newJobCustomerId}
+              businessName={profile.businessName}
             />
           ) : active === "Production" ? (
             <JobsPage board />

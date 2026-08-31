@@ -94,12 +94,14 @@ type Props = {
   board?: boolean;
   createRequest?: number;
   initialCustomerId?: string;
+  businessName?: string;
 };
 
 export default function JobsPage({
   board = false,
   createRequest = 0,
   initialCustomerId,
+  businessName = "Print shop",
 }: Props) {
   const [showPricing, setShowPricing] = useState(false);
   const [pricingIndex, setPricingIndex] = useState(0);
@@ -1137,7 +1139,7 @@ export default function JobsPage({
             />
           );
         })()}
-    {receipt && <div className="modal-backdrop"><section className="receipt-preview"><header><div><strong>PrintManager</strong><small>Receipt No: {receipt.jobNumber}</small></div><button type="button" onClick={() => setReceipt(null)}>Close</button></header><h2>Receipt</h2><p className="receipt-customer"><strong>Customer:</strong> {receipt.customerName || "Walk-in customer"}</p><div className="receipt-table"><div><strong>Item / description</strong><strong>Amount</strong></div><div><span>{receipt.title}</span><span>UGX {receipt.totalAmount.toLocaleString("en-UG")}</span></div></div><div className="receipt-preview-total"><span>Total:</span><strong>UGX {receipt.totalAmount.toLocaleString("en-UG")}</strong></div><footer><button type="button" onClick={() => setReceipt(null)}>Done</button><button type="button" className="setup-next" onClick={() => window.print()}>Print receipt</button></footer></section></div>}
+    {receipt && <div className="modal-backdrop"><section className="receipt-preview"><header><div><strong>{businessName}</strong><small>Receipt No: {receipt.jobNumber}</small></div><button type="button" onClick={() => setReceipt(null)}>Close</button></header><h2>Receipt</h2><p className="receipt-customer"><strong>Customer:</strong> {receipt.customerName || "Walk-in customer"}</p><div className="receipt-table"><div><strong>Item / description</strong><strong>Amount</strong></div><div><span>{receipt.title}</span><span>UGX {receipt.totalAmount.toLocaleString("en-UG")}</span></div></div><div className="receipt-preview-total"><span>Total:</span><strong>UGX {receipt.totalAmount.toLocaleString("en-UG")}</strong></div><footer><small className="receipt-branding">Made by PrintManager</small><button type="button" onClick={() => setReceipt(null)}>Done</button><button type="button" className="setup-next" onClick={() => window.print()}>Print receipt</button></footer></section></div>}
     </>
   );
 }
