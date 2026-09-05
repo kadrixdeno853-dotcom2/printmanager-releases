@@ -200,7 +200,7 @@ export function LoginScreen({
           <AlertTriangle />
         </div>
         <p className="eyebrow">START A NEW COMPANY</p>
-        <h1>Reset PrintManager</h1>
+        <h1>Reset PrintAcad</h1>
         <p className="auth-copy">
           This permanently removes <strong>{business.businessName}</strong>,
           every account, customer, order, quotation, invoice, payment, expense
@@ -360,7 +360,7 @@ function AuthLayout({ children }: { children: React.ReactNode }) {
     <div className="auth-page">
       <div className="setup-brand">
         <CompanyLogo className="brand-mark" />
-        <strong>PrintManager</strong>
+        <strong>PrintAcad</strong>
       </div>
       <main>{children}</main>
       <small>Offline business management  Local data protection</small>

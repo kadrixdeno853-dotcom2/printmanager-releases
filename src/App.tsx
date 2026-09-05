@@ -538,7 +538,7 @@ function App() {
       </div>
     );
   if (profile === null && usersExist)
-    return <LoginScreen business={{...({businessName:"PrintManager"} as BusinessProfile)} as BusinessProfile} onLogin={async user=>{setSignedInUser(user);const restored=await getBusinessProfile();if(restored)setProfile(restored);}} onReset={()=>setSignedInUser(null)} />;
+    return <LoginScreen business={{...({businessName:"PrintAcad"} as BusinessProfile)} as BusinessProfile} onLogin={async user=>{setSignedInUser(user);const restored=await getBusinessProfile();if(restored)setProfile(restored);}} onReset={()=>setSignedInUser(null)} />;
   if (profile === null)
     return (
       <SetupWizard
@@ -1228,7 +1228,7 @@ function App() {
         <div className="report-prompt-backdrop" role="dialog" aria-modal="true" aria-labelledby="report-prompt-title">
           <section className="report-prompt">
             <div className="report-prompt-icon"><CircleAlert size={22} /></div>
-            <p className="eyebrow">PRINTMANAGER ADMIN</p>
+            <p className="eyebrow">PRINTACAD ADMIN</p>
             <h2 id="report-prompt-title">Before you report an issue</h2>
             <p>If an error is displayed, copy the exact error message and include what you were doing when it happened. This helps our team resolve it faster.</p>
             <div className="report-prompt-actions"><button className="secondary-button" onClick={() => setShowReportPrompt(false)}>Cancel</button><button className="primary-button" onClick={continueReport}>Open support page</button></div>

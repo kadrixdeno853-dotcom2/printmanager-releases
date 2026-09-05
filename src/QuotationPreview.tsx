@@ -67,7 +67,7 @@ export default function QuotationPreview({
           <header>
           <CompanyLogo />
             <div>
-              <h1>{business?.businessName ?? "PrintManager Business"}</h1>
+              <h1>{business?.businessName ?? "PrintAcad Business"}</h1>
               <p>{business?.address}</p>
               <p>
                 {business?.phone}

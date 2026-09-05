@@ -1,7 +1,7 @@
 export type AppTheme = "forest" | "ocean" | "royal" | "sunset" | "charcoal" | "teal" | "indigo" | "rose" | "gold" | "berry";
 export const themeStorageKey = "printmanager:colour-theme";
 export const themes: Array<{ id: AppTheme; name: string; description: string; colors: [string,string,string] }> = [
-  { id: "forest", name: "Forest", description: "PrintManager green", colors: ["#102e2b","#194f46","#d8f36d"] },
+  { id: "forest", name: "Forest", description: "PrintAcad green", colors: ["#102e2b","#194f46","#d8f36d"] },
   { id: "ocean", name: "Ocean", description: "Calm professional blue", colors: ["#102d46","#185b82","#72d6f2"] },
   { id: "royal", name: "Royal", description: "Modern violet", colors: ["#2b2145","#6348a4","#d8c5ff"] },
   { id: "sunset", name: "Sunset", description: "Warm copper", colors: ["#43291f","#9a5033","#ffd38a"] },
